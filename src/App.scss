@@ -1,0 +1,96 @@
+
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+html * {
+    font-family: "VT323", system-ui;
+}
+
+.canvas-background{
+    background: linear-gradient(180deg, rgba(28,12,102,1) 0%, rgba(8,1,43,1) 100%);
+}
+
+button{
+    border: none;
+    border-radius: 0;
+    background: #d8d8d8;
+    cursor: pointer;
+    &:hover{
+        outline: 2px solid #252525;
+    }
+}
+  
+.controls-wrapper{
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: auto;
+    height: 100%;
+}
+
+.control-box{
+    padding: 1rem;
+    width: 300px;
+    margin: 2rem;
+    background: #efefef;
+}
+
+#entity-list{
+    .item{
+        display: flex;
+        flex-flow: column;
+        .header{
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 0;
+        }
+        .submenu{
+            border-top: 1px solid grey;
+            background: rgba(0,0,0,0.03);
+        }
+    }
+}
+
+.controls{
+    .title{
+        font-weight: 800;
+        font-size: 18px;
+    }
+
+    .item {
+        margin-top: 1rem;
+        label{
+            font-weight: 800;
+            display: block;
+        }
+        .control{
+            margin-top: 0.5rem;
+        }
+    }
+}
+
+.horizontal-slider{
+    .thumb{
+        width: 1rem;
+        height: 1rem;
+        background: #b2b2b2;
+        transform: translate(-25%, -50%);
+        text-align: center;
+        font-size: 12px;
+        &.active{
+            border: none;
+            outline: none;
+            background: #979797;
+        }
+    }
+    .track{
+        background: #b2b2b2;
+        height: 2px;
+        transform: translate(-4px, 0);
+    }
+    .mark{
+        background: #b2b2b250;
+        height: 8px;
+        width: 2px;
+    
+        transform: translate(0, -3px);
+    }
+}

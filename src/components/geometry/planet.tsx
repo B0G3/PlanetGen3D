@@ -8,7 +8,6 @@ import TerrestialPlanetGeometry from "./terrestialPlanet/planet"
 
 export default function Planet({planet} : {planet: PlanetInterface}){
 
-    console.log(!!planet.ring);
     return (<>
         {planet instanceof TerrestialPlanet && <>
             <TerrestialPlanetGeometry planet={planet}></TerrestialPlanetGeometry>

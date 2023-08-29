@@ -32,7 +32,7 @@ export function createRandomPlanet(radius?: number){
 export function solarSystem(){
     let sun = new Star(new THREE.Vector3(0,0,0), 16);
     sun.setName('Sun')
-    sun.setColor("#f5b874");
+    sun.setColor("#ef7e00");
     let radius = sun.radius;
     let satellite = null;
 
@@ -93,7 +93,7 @@ export function solarSystem(){
     ganymede.setSteepness(3);
     ganymede.setMountainousness(10);
     ganymede.setWaterLevel(0);
-    jupiter.addSatellite(ganymede, jupiter.radius + 5, 0.6, Math.PI/2, Math.PI/2)
+    jupiter.addSatellite(ganymede, jupiter.radius + 5, 0.6, Math.PI/4,0)
 
     let callisto = new TerrestialPlanet(new THREE.Vector3(0,0,0), 2);
     callisto.setName('Callisto');
@@ -101,7 +101,7 @@ export function solarSystem(){
     callisto.setSteepness(3);
     callisto.setMountainousness(10);
     callisto.setWaterLevel(0);
-    jupiter.addSatellite(callisto, jupiter.radius + 9, 0.4, Math.PI/4, Math.PI/4)
+    jupiter.addSatellite(callisto, jupiter.radius + 9, 0.4, 0, Math.PI/4)
 
     let io = new TerrestialPlanet(new THREE.Vector3(0,0,0), 2);
     io.setName('Io');
@@ -109,7 +109,7 @@ export function solarSystem(){
     io.setSteepness(3);
     io.setMountainousness(10);
     io.setWaterLevel(0);
-    jupiter.addSatellite(io, jupiter.radius + 11, 0.2, -Math.PI/4, -Math.PI/4)
+    jupiter.addSatellite(io, jupiter.radius + 11, 0.2, -Math.PI/4, 0)
 
     let europa = new TerrestialPlanet(new THREE.Vector3(0,0,0), 2);
     europa.setName('Europa');
@@ -117,7 +117,7 @@ export function solarSystem(){
     europa.setSteepness(3);
     europa.setMountainousness(10);
     europa.setWaterLevel(0);
-    jupiter.addSatellite(europa, jupiter.radius + 13, 0.5,  -Math.PI/8, -Math.PI/8)
+    jupiter.addSatellite(europa, jupiter.radius + 13, 0.5,  0, -Math.PI/4)
 
     let saturn = new GasPlanet(new THREE.Vector3(0,0,0), 8);
     saturn.setName('Saturn');
@@ -129,6 +129,8 @@ export function solarSystem(){
     radius = satellite.distance;
 
 
+
+    
 
     return sun;
 }

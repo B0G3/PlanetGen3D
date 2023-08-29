@@ -20,7 +20,7 @@ export default function Universe({celestials, selectedEntity} : Props){
         const matrixWolrd = selectedEntity?.getGeometry()?.matrixWorld;
         if(!matrixWolrd) return;
         const position = new THREE.Vector3();
-        position.setFromMatrixPosition( matrixWolrd);
+        position.setFromMatrixPosition(matrixWolrd);
 
         if(cameraControlRef.current){
             cameraControlRef.current.moveTo(position.x, position.y, position.z, transition);
@@ -28,7 +28,7 @@ export default function Universe({celestials, selectedEntity} : Props){
     }
 
     useFrame((state, delta)=> {
-        updateCamera(false);
+        updateCamera(true);
     })
 
     return (<>
@@ -37,7 +37,7 @@ export default function Universe({celestials, selectedEntity} : Props){
                 <CelestialGeometry key={e.id} celestial={e}></CelestialGeometry> 
             )}
         </group>
-		<CameraControls maxDistance={80} ref={cameraControlRef}/>
+		<CameraControls smoothTime={0.2} maxDistance={80} ref={cameraControlRef}/>
         <Background></Background>
     </>);
 }

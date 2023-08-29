@@ -2,22 +2,63 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 html * {
     font-family: "VT323", system-ui;
+    text-transform: uppercase;
 }
 
 .canvas-background{
     background: linear-gradient(180deg, rgba(28,12,102,1) 0%, rgba(8,1,43,1) 100%);
 }
 
-button{
-    border: none;
-    border-radius: 0;
-    background: #d8d8d8;
-    cursor: pointer;
-    &:hover{
-        outline: 2px solid #252525;
+
+#entity-list{
+    .item{
+        display: flex;
+        flex-flow: column;
+        .header{
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 0 2px 4px;
+
+            .buttons{
+                display: flex;
+                button{
+                    margin-left: 4px;
+                    display: flex;
+                    border: none;
+                    border-radius: 0;
+                    background: #d8d8d8;
+                    width: 1rem;
+                    height: 1rem;
+                    cursor: pointer;
+                    &:hover{
+                        outline: 2px solid #252525;
+                    }
+                }
+            }
+            
+        }
+        .submenu{
+            background: rgba(0,0,0,0.075);
+        }
+
+        &.active{
+            >.header{
+                // border-left: 2px solid red;
+                position: relative;
+                // padding-left: 0.5rem;
+                &::before{
+                    content: url("data:image/svg+xml,%3Csvg viewBox='0 0 12.7 12.7' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform='translate(169.33 -118.75)'%3E%3Cpath d='m-166.16 119.28v11.641h1.0588v-1.0588h1.0583v-1.0584h1.0588v-1.0578h1.0578v-1e-3h5.3e-4v-1.0563h-5.3e-4v-1e-3h5.3e-4v1e-3h1.0588v-1.0588h-1e-3v-5.3e-4h1e-3v5.3e-4h1.0563v-1.0583c-0.35256 5.2e-4 -0.70428-5.3e-4 -1.0563-5.3e-4v-1.0583h-1.0588v-1.0583h-1.0584v-1.0589h-1.0588v-1.0583h-1.0583v-1.0568z' solid-color='rgb(0,0,0)' font-feature-settings='normal' font-variant-alternates='normal' font-variant-caps='normal' font-variant-ligatures='normal' font-variant-numeric='normal' font-variant-position='normal' isolation='auto' mix-blend-mode='normal' paint-order='normal' shape-padding='0' text-decoration-color='rgb(0,0,0)' text-decoration-line='none' text-decoration-style='solid' text-indent='0' text-orientation='mixed' text-transform='none' white-space='normal'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");                    position: absolute;
+                    fill: black;
+                    width: 12px;
+                    pointer-events: none;
+                    left: -12px;
+                    // top: 2px;
+                }
+            }
+        }
     }
 }
-  
+
 .controls-wrapper{
     position: fixed;
     top: 0;
@@ -31,58 +72,47 @@ button{
     width: 300px;
     margin: 2rem;
     background: #efefef;
-}
 
-#entity-list{
-    .item{
+    .title{
+        text-align: center;
+        padding: 2px;
+        border-bottom: 2px solid #252525;
+    }
+
+    .control-item{
+        margin-top: 4px;
         display: flex;
         flex-flow: column;
-        .header{
-            display: flex;
-            justify-content: space-between;
-            padding: 2px 0;
-        }
-        .submenu{
-            border-top: 1px solid grey;
-            background: rgba(0,0,0,0.03);
-        }
-    }
-}
-
-.controls{
-    .title{
-        font-weight: 800;
-        font-size: 18px;
-    }
-
-    .item {
-        margin-top: 1rem;
         label{
-            font-weight: 800;
-            display: block;
+
         }
-        .control{
-            margin-top: 0.5rem;
+        input{
+            margin: 0;
         }
     }
 }
 
 .horizontal-slider{
+    margin-top: 8px;
+    margin-bottom: 4px;
+    transform: translateX(4px);
     .thumb{
-        width: 1rem;
-        height: 1rem;
-        background: #b2b2b2;
+        min-width: 14px;
+        height: 14px;
+        background: #d8d8d8;
         transform: translate(-25%, -50%);
         text-align: center;
         font-size: 12px;
+        padding: 1px;
         &.active{
             border: none;
             outline: none;
-            background: #979797;
+            background: #d8d8d8;
+            border: 2px solid #252525;
         }
     }
     .track{
-        background: #b2b2b2;
+        background: #d8d8d8;
         height: 2px;
         transform: translate(-4px, 0);
     }

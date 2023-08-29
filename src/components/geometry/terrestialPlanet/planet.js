@@ -30,11 +30,10 @@ function Planet({planet}){
                 points.push([projectedX, projectedY]);
             }
             return points;
-        }, [NUM_POINTS]);
+        }, [planet.radius, planet.waterLevel]);
 
     // Generate Voronoi diagram
     const voronoi = React.useMemo(()=>geoVoronoi().polygons(points_2d), [points_2d]);
-
     // Generate 3D tile data
     const tiles = React.useMemo(() => {
             // Mutate data

@@ -1,6 +1,7 @@
 
 import Renderable from "./renderable";
-export default class Satellite{
+import SatelliteInterface from "../interfaces/satellite";
+export default class Satellite implements SatelliteInterface{
     parent: Renderable;
     entity: Renderable;
     distance: number;
@@ -18,5 +19,9 @@ export default class Satellite{
 
     getGeometry(){
         return this.entity.geometry;
+    }
+
+    getId(){
+        return this.entity.id;
     }
 }

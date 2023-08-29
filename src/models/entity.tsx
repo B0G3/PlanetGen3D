@@ -6,6 +6,10 @@ abstract class Entity{
       this.id = Entity.idx;
       Entity.idx++;
     }
+
+    getId(){
+      return this.id;
+    }
 }
 
 export default Entity;

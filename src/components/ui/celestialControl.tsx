@@ -19,6 +19,7 @@ interface Data{
     steepness?: number;
     mountainousness?: number;
     color?: hexColor;
+    fluctuations?: number;
 }
 
 export default function CelestialControl({data, update} : Props){
@@ -38,7 +39,7 @@ export default function CelestialControl({data, update} : Props){
 
     return (
         <div style={{"margin": '1rem 0 0 0'}}>
-            <div className="title">PLANET CONTROLS</div>
+            <div className="title">CELESTIAL CONTROLS</div>
             {data instanceof TerrestialPlanet &&
                 <>
                 <div className="control-item">
@@ -104,9 +105,23 @@ export default function CelestialControl({data, update} : Props){
                     <label>Radius</label>
                     <Slider
                         min={MIN_PLANET_RADIUS}
-                        max={MAX_PLANET_RADIUS}
+                        max={MAX_PLANET_RADIUS * 3}
                         value={editedObject.radius}
                         onChange={(e)=>handleInputChange('radius', e)}
+
+                        className="horizontal-slider"
+                        thumbClassName="thumb"
+                        trackClassName="track"
+                        renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                    />
+                </div>
+                <div className="control-item">
+                    <label>Fluctuations</label>
+                    <Slider
+                        min={0}
+                        max={100}
+                        value={(editedObject?.fluctuations??0) * 50}
+                        onChange={(e)=>handleInputChange('fluctuations', e/50)}
 
                         className="horizontal-slider"
                         thumbClassName="thumb"

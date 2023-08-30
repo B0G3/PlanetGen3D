@@ -11,7 +11,6 @@ import Satellite from "../../models/satellite";
 
 interface Props{
     celestial: CelestialModel
-    // selectedEntity?: Renderable | Satellite | null
 }
 
 export default function Celestial({celestial} : Props){

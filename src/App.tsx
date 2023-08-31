@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 // import './App.css';
 import './App.scss';
-import { createRandomPlanet, solarSystem } from './utils/generator';
+import { createRandomPlanet, solarSystem, earth } from './utils/generator';
 import Star from './models/star';
 import Celestial from './models/celestial';
 import { Canvas } from '@react-three/fiber';
@@ -11,6 +11,11 @@ import { Vector3 } from 'three';
 import CelestialControls from './components/ui/celestialControls';
 
 const CELESTIALS: Array<Celestial> = [];
+// const earth2 = earth();
+// earth2.setPosition(new Vector3(10,10,10));
+// CELESTIALS.push(earth());
+// CELESTIALS.push(earth2);
+
 CELESTIALS.push(solarSystem());
 
 const App = () => {

@@ -69,7 +69,7 @@ export default function({star} : {star: Star}){
             <icosahedronGeometry args={[star.radius, Math.ceil(Math.sqrt(star.radius))]}></icosahedronGeometry>
             <meshBasicMaterial
                     // color={star.color}
-                    side={THREE.DoubleSide}
+                    side={THREE.FrontSide}
                     attach="material"
                     vertexColors={ true }
             />

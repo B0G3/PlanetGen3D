@@ -34,6 +34,8 @@ function Planet({planet}){
 
     // Generate Voronoi diagram
     const voronoi = React.useMemo(()=>geoVoronoi().polygons(points_2d), [points_2d]);
+
+    console.log(geoVoronoi().polygons(points_2d), geoVoronoi().triangles(points_2d));
     // Generate 3D tile data
     const tiles = React.useMemo(() => {
             // Mutate data
@@ -72,17 +74,19 @@ function Planet({planet}){
     //     tileGroup.current.rotation.set(rotation.x + 0.001, rotation.y, rotation.z);
     // })
 
+    console.log(tiles);
+
 
     return (
         <>
-        {tiles.map((e, k) => {
+        {/* {tiles.map((e, k) => {
                 return (
                     <PlanetTile key={[planet.id, k]} points={e.points} indices={e.indices} planet={planet}></PlanetTile> 
                 )
-        })}
-            {/* <mesh>
+        })} */}
+            <mesh>
                 <sphereGeometry args={[planet.radius, 16, 16]}></sphereGeometry>
-            </mesh> */}
+            </mesh>
         </>
     )
 }

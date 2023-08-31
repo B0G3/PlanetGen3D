@@ -134,3 +134,13 @@ export function solarSystem(){
 
     return sun;
 }
+
+export function earth(){
+    let earth = new TerrestialPlanet(new THREE.Vector3(0,0,0), 5);
+    earth.setName('Earth');
+    earth.setColors({ice: '#f0f3f4', rock: '#b2b2b2', grass: '#459e4f', sand: '#e8cd5d', water: '#27a1f9'})
+    earth.setSteepness(6);
+    earth.setMountainousness(5);
+    earth.setWaterLevel(5);
+    return earth;
+}

@@ -11,9 +11,10 @@ export default class TerrestialPlanet extends Celestial implements Planet{
     waterLevel: number = 5;
     steepness: number = 5;
     mountainousness: number = 5;
+    detailCount: number = 5;
     colors?: PlanetColors;
-    clouds: Array<Satellite> = []
     ring?: PlanetRing
+    clouds: Array<Satellite> = []
 
     constructor(position: THREE.Vector3 = new THREE.Vector3(0,0,0), radius: number = 5){
       super(position, radius);

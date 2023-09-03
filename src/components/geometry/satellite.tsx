@@ -28,6 +28,7 @@ function HollowCircle({radius, segments} : {radius: number, segments: number}) {
 
 export default function Satellite({satellite, selected = false} : Props){
     const childRef = useRef<THREE.Group>(null);
+    const entityRef = useRef<THREE.Group>(null);
     const [startZ, setStartZ] = useState(Math.random() * Math.PI);
     const distance = (satellite.parent instanceof Celestial) ? (satellite.parent.radius + satellite.distance) : satellite.distance;
 
@@ -37,17 +38,22 @@ export default function Satellite({satellite, selected = false} : Props){
     }, [childRef]);
 
     useFrame((state, delta) => {
+        // Satellite
         let rotation = childRef.current?.rotation;
-        let speed = satellite.speed * delta * 10;
-        speed /= distance;
+        let speed = (satellite.speed * delta * 10 )/ distance;
         if(rotation) childRef.current?.rotation.set(rotation.x, rotation.y, rotation.z + speed);
+
+        // Celestial rotation
+        rotation = entityRef.current?.rotation;
+        speed = (satellite.speed * delta * 10 )/ distance;
+        if(rotation) entityRef.current?.rotation.set(rotation.x, rotation.y, rotation.z + speed);
     })
 
     return (<>
             <group rotation={[satellite.tiltX, satellite.tiltY, 0]} ref={childRef}>
                 {/* {selected && <HollowCircle radius={distance} segments={32}></HollowCircle>} */}
                 <HollowCircle radius={distance} segments={32}></HollowCircle>
-                <group position={[0,distance,0]} >
+                <group position={[0,distance,0]} ref={entityRef}>
                     <Renderable renderable={satellite.entity}></Renderable>
                 </group>
             </group>

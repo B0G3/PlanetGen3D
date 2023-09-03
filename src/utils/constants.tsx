@@ -1,5 +1,8 @@
-export const MAX_PLANET_RADIUS : number = 30;
+export const MAX_PLANET_RADIUS : number = 20;
 export const MIN_PLANET_RADIUS : number = 1;
+
+export const MAX_STAR_RADIUS : number = 60;
+export const MIN_STAR_RADIUS : number = 1;
 
 export const MAX_PLANET_STEEPNESS : number = 10;
 export const MIN_PLANET_STEEPNESS : number = 0;

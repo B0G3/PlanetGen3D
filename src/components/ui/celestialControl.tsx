@@ -3,7 +3,7 @@ import CelestialInterface from "../../interfaces/celestial";
 import Celestial from "../../models/celestial";
 import Slider from 'react-slider'
 import TerrestialPlanet from "../../models/terrestialPlanet";
-import { MAX_PLANET_MOUNTAINOUSNESS, MAX_PLANET_RADIUS, MAX_PLANET_STEEPNESS, MIN_PLANET_MOUNTAINOUSNESS, MIN_PLANET_RADIUS, MIN_PLANET_STEEPNESS } from "../../utils/constants";
+import { MAX_PLANET_MOUNTAINOUSNESS, MAX_PLANET_RADIUS, MAX_PLANET_STEEPNESS, MAX_STAR_RADIUS, MIN_PLANET_MOUNTAINOUSNESS, MIN_PLANET_RADIUS, MIN_PLANET_STEEPNESS, MIN_STAR_RADIUS } from "../../utils/constants";
 import Star from "../../models/star";
 import {GithubPicker} from 'react-color'
 import hexColor from "../../types/hexColor";
@@ -20,13 +20,17 @@ interface Data{
     mountainousness?: number;
     color?: hexColor;
     fluctuations?: number;
+    detailCount?: number;
 }
 
 export default function CelestialControl({data, update} : Props){
     const [editedObject, setEditedObject] = React.useState<Data>({ ...data });
 
     const handleInputChange = (name : string, value : any) => {
-        setEditedObject((prev) => ({ ...prev, [name]: value }));
+        if(name === 'radius'){
+            const diff = (editedObject.radius ?? 0) - (editedObject.waterLevel ?? 0);
+            setEditedObject((prev) => ({ ...prev, [name]: value, waterLevel: Math.min(Math.max(value - diff, 0), MAX_PLANET_RADIUS)}));
+        }else setEditedObject((prev) => ({ ...prev, [name]: value }));
     };
 
     React.useEffect(() => {
@@ -70,7 +74,7 @@ export default function CelestialControl({data, update} : Props){
                     />
                 </div>
                 <div className="control-item">
-                    <label>Steepness</label>
+                    <label>Terrain variety</label>
                     <Slider
                         min={MIN_PLANET_STEEPNESS}
                         max={MAX_PLANET_STEEPNESS}
@@ -97,15 +101,41 @@ export default function CelestialControl({data, update} : Props){
                         renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
                     />
                 </div>
-                    
+                <hr></hr>  
+                <div className="control-item">
+                    <label>Detail count</label>
+                    <Slider
+                        min={0}
+                        max={100}
+                        value={(editedObject.detailCount??0) * 10}
+                        onChange={(e)=>handleInputChange('detailCount', e / 10)}
+
+                        className="horizontal-slider"
+                        thumbClassName="thumb"
+                        trackClassName="track"
+                        renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                    />
+                </div>
+                <div className="control-item">
+                    <label>Detail proportions</label>
+                    <Slider
+                        className="horizontal-slider"
+                        thumbClassName="thumb"
+                        trackClassName="track"
+                        defaultValue={[0, 100]}
+                        renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                        pearling
+                        minDistance={0}
+                    />
+                </div>
                 </>}
             {data instanceof Star && 
                 <>
                 <div className="control-item">
                     <label>Radius</label>
                     <Slider
-                        min={MIN_PLANET_RADIUS}
-                        max={MAX_PLANET_RADIUS * 3}
+                        min={MIN_STAR_RADIUS}
+                        max={MAX_STAR_RADIUS}
                         value={editedObject.radius}
                         onChange={(e)=>handleInputChange('radius', e)}
 
@@ -132,7 +162,6 @@ export default function CelestialControl({data, update} : Props){
                 <div className="control-item">
                     <label>Color</label>
                     <input type="color" value={editedObject.color} onChange={(e) => handleInputChange('color', e.target.value)}/>
-                    {/* <GithubPicker width="100%" triangle="hide"></GithubPicker> */}
                 </div>
                 </>
             }

@@ -65,6 +65,12 @@ html * {
     right: 0;
     width: auto;
     height: 100%;
+
+    hr{
+        margin: 1rem 0;
+        border-top: 2px dashed #d8d8d8;
+        border-bottom: none;
+    }
 }
 
 .control-box{
@@ -123,4 +129,19 @@ html * {
     
         transform: translate(0, -3px);
     }
+}
+
+.github-picker{
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+}
+
+input[type=color]{
+    border: none;
+    width: 100%;
+    padding: 0;
+    height: 1rem;
+    margin: 4px 0 2px 0 !important;
 }

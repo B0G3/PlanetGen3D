@@ -3,11 +3,14 @@ import Star from "../../models/star";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { createNoise4D } from "simplex-noise";
-import hexColor from "../../types/hexColor";
+import { MAX_STAR_RADIUS } from "../../utils/constants";
 const Color = require('color');
 const noise4D = createNoise4D();
 
 export default function({star} : {star: Star}){
+    const DETAIL = Math.ceil((star.radius * 5) / Math.sqrt(3) / 24);
+    const RADIUS_MULTIPLIER = (1 - (MAX_STAR_RADIUS - star.radius)/MAX_STAR_RADIUS);
+    
     const ref = React.useRef<THREE.Mesh | null>(null)
     const [count, setCount] = React.useState(0);
     const [startPositions, setStartPositions] = React.useState<Array<THREE.Vector3>>([]);
@@ -43,18 +46,22 @@ export default function({star} : {star: Star}){
             colors = geometry.attributes.color;
         }
 
+        let k = 0;
         for ( let i = 0; i < positions.count; i ++ ) {
             if(!startPositions[i]) return;
-            const noise = noise4D(startPositions[i].x, startPositions[i].y, startPositions[i].z, count) * star.fluctuations;
+            const noise = noise4D(startPositions[i].x, startPositions[i].y, startPositions[i].z, count) * (star.fluctuations + 0.25);
             const hex = Color(star.color).darken(noise * 0.5).rgbNumber();
             color.setHex(hex);
 
-            colors.setXYZ(i * 3 + 0, color.r, color.g, color.b);
-            colors.setXYZ(i * 3 + 1, color.r, color.g, color.b);
-            colors.setXYZ(i * 3 + 2, color.r, color.g, color.b);
+            if(i%3===0){
+                colors.setXYZ(k * 3 + 0, color.r, color.g, color.b);
+                colors.setXYZ(k * 3 + 1, color.r, color.g, color.b);
+                colors.setXYZ(k * 3 + 2, color.r, color.g, color.b);
+                k++;
+            }
             
         
-            v3.copy(startPositions[i]).multiplyScalar(star.radius).addScaledVector(startPositions[i], noise);
+            v3.copy(startPositions[i]).multiplyScalar(star.radius).addScaledVector(startPositions[i], noise * RADIUS_MULTIPLIER * 2);
             positions.setXYZ(i, v3.x, v3.y, v3.z)
 
         }
@@ -65,14 +72,19 @@ export default function({star} : {star: Star}){
     })
 
     return (
-        <mesh ref={ref}>
-            <icosahedronGeometry args={[star.radius, Math.ceil(Math.sqrt(star.radius))]}></icosahedronGeometry>
-            <meshBasicMaterial
-                    // color={star.color}
-                    side={THREE.FrontSide}
-                    attach="material"
-                    vertexColors={ true }
-            />
-        </mesh>
+        <group>
+            <mesh ref={ref}>
+                <icosahedronGeometry args={[star.radius, DETAIL]}></icosahedronGeometry>
+                <meshBasicMaterial
+                        // color={star.color}
+                        side={THREE.FrontSide}
+                        attach="material"
+                        vertexColors={ true }
+                        // transparent={true}
+                        // opacity={0.85}
+                />
+            </mesh>
+        </group>
+
     )
 }

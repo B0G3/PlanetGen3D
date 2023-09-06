@@ -1,11 +1,11 @@
-import Planet from "../interfaces/planet";
 import PlanetRing from "../interfaces/planetRing";
 import hexColor from "../types/hexColor";
-import Celestial from "./celestial";
+import Planet from "./planet";
 import Satellite from "./satellite";
 
-export default class GasPlanet extends Celestial implements Planet{
+export default class GasPlanet extends Planet{
     color: hexColor = '#ffffff';
     clouds?: Array<Satellite>;
     ring?: PlanetRing;
+    cloudCount: number = 0;
 }

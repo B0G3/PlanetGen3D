@@ -7,4 +7,5 @@ export default interface Satellite{
     speed: number;
     tiltX: number;
     tiltY: number;
+
 }

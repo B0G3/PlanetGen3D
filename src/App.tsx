@@ -9,6 +9,7 @@ import { Canvas } from '@react-three/fiber';
 import Universe from './components/geometry/universe';
 import { Vector3 } from 'three';
 import CelestialControls from './components/ui/celestialControls';
+import {Stats} from '@react-three/drei'
 
 const CELESTIALS: Array<Celestial> = [];
 // const earth2 = earth();
@@ -25,7 +26,7 @@ const App = () => {
   return (
     <div className="canvas-background" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', position: 'relative'}}>
       <Canvas>
-          {/* <Stats></Stats> */}
+          <Stats></Stats>
           <Universe
             selectedEntity={entity}
             // setSelectedEntity={setEntity}

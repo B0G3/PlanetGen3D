@@ -1,5 +1,4 @@
 import React from "react";
-import CelestialInterface from "../../interfaces/celestial";
 import Celestial from "../../models/celestial";
 import Slider from 'react-slider'
 import TerrestialPlanet from "../../models/terrestialPlanet";
@@ -21,6 +20,7 @@ interface Data{
     color?: hexColor;
     fluctuations?: number;
     detailCount?: number;
+    cloudCount?: number;
 }
 
 export default function CelestialControl({data, update} : Props){
@@ -101,14 +101,13 @@ export default function CelestialControl({data, update} : Props){
                         renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
                     />
                 </div>
-                <hr></hr>  
                 <div className="control-item">
-                    <label>Detail count</label>
+                    <label>Cloud count</label>
                     <Slider
                         min={0}
-                        max={100}
-                        value={(editedObject.detailCount??0) * 10}
-                        onChange={(e)=>handleInputChange('detailCount', e / 10)}
+                        max={20}
+                        value={(editedObject.cloudCount??0)}
+                        onChange={(e)=>handleInputChange('cloudCount', e)}
 
                         className="horizontal-slider"
                         thumbClassName="thumb"
@@ -116,7 +115,22 @@ export default function CelestialControl({data, update} : Props){
                         renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
                     />
                 </div>
+                {/* <hr></hr>   */}
                 <div className="control-item">
+                    <label>Detail count</label>
+                    <Slider
+                        min={0}
+                        max={10}
+                        value={(editedObject.detailCount??0)}
+                        onChange={(e)=>handleInputChange('detailCount', e)}
+
+                        className="horizontal-slider"
+                        thumbClassName="thumb"
+                        trackClassName="track"
+                        renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                    />
+                </div>
+                {/* <div className="control-item">
                     <label>Detail proportions</label>
                     <Slider
                         className="horizontal-slider"
@@ -127,7 +141,7 @@ export default function CelestialControl({data, update} : Props){
                         pearling
                         minDistance={0}
                     />
-                </div>
+                </div> */}
                 </>}
             {data instanceof Star && 
                 <>

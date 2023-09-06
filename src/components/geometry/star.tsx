@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { createNoise4D } from "simplex-noise";
 import { MAX_STAR_RADIUS } from "../../utils/constants";
-const Color = require('color');
+import { colord } from "colord";
 const noise4D = createNoise4D();
 
 export default function({star} : {star: Star}){
@@ -50,8 +50,10 @@ export default function({star} : {star: Star}){
         for ( let i = 0; i < positions.count; i ++ ) {
             if(!startPositions[i]) return;
             const noise = noise4D(startPositions[i].x, startPositions[i].y, startPositions[i].z, count) * (star.fluctuations + 0.25);
-            const hex = Color(star.color).darken(noise * 0.5).rgbNumber();
-            color.setHex(hex);
+            const tenth = Math.round(noise * 20) / 20
+            const hex = colord(star.color).darken(tenth/4).toHex();
+            color.set(hex);
+            
 
             if(i%3===0){
                 colors.setXYZ(k * 3 + 0, color.r, color.g, color.b);
@@ -60,7 +62,6 @@ export default function({star} : {star: Star}){
                 k++;
             }
             
-        
             v3.copy(startPositions[i]).multiplyScalar(star.radius).addScaledVector(startPositions[i], noise * RADIUS_MULTIPLIER * 2);
             positions.setXYZ(i, v3.x, v3.y, v3.z)
 

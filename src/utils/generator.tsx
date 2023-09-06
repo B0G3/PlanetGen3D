@@ -46,12 +46,12 @@ export function solarSystem(){
     radius = satellite.distance;
 
 
-    let venus = new TerrestialPlanet(new THREE.Vector3(0,0,0), 5);
+    let venus = new TerrestialPlanet(new THREE.Vector3(0,0,0), 15);
     venus.setName('Venus');
     venus.setColors({ice: '#c96b18', rock: '#5f5043', grass: '#8c5e35', sand: '#a07f62', water: '#4597ad'})
     venus.setSteepness(6);
     venus.setMountainousness(7);
-    venus.setWaterLevel(4);
+    venus.setWaterLevel(14.7);
     satellite = sun.addSatellite(venus, radius + 14, 0.4)
     radius = satellite.distance;
 
@@ -127,11 +127,6 @@ export function solarSystem(){
     }
     satellite = sun.addSatellite(saturn, radius + 36, 0.2)
     radius = satellite.distance;
-
-
-
-    
-
     return sun;
 }
 

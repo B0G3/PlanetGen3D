@@ -2,19 +2,18 @@ import * as THREE from 'three';
 import { generateName } from '../utils/helpers';
 import { MAX_PLANET_MOUNTAINOUSNESS, MAX_PLANET_RADIUS, MAX_PLANET_STEEPNESS, MIN_PLANET_RADIUS, PLANET_COLORS } from '../utils/constants';
 import PlanetColors from '../interfaces/planetColors';
-import Celestial from './celestial';
-import Planet from '../interfaces/planet';
-import Satellite from './satellite';
 import PlanetRing from '../interfaces/planetRing';
+import Planet from './planet';
 
-export default class TerrestialPlanet extends Celestial implements Planet{
+export default class TerrestialPlanet extends Planet{
     waterLevel: number = 5;
     steepness: number = 5;
     mountainousness: number = 5;
-    detailCount: number = 5;
+    detailCount: number = 0;
+    cloudCount: number = 0;
+
     colors?: PlanetColors;
     ring?: PlanetRing
-    clouds: Array<Satellite> = []
 
     constructor(position: THREE.Vector3 = new THREE.Vector3(0,0,0), radius: number = 5){
       super(position, radius);
@@ -22,7 +21,6 @@ export default class TerrestialPlanet extends Celestial implements Planet{
 
       this.randomize(radius);
     }
-
 
     setWaterLevel(level: number){
       this.waterLevel = Math.max(level, MIN_PLANET_RADIUS - 0.5);

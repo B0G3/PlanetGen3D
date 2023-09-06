@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import Renderable from "./renderable";
 import Celestial from "../../models/celestial"
 import { Line, PointMaterial } from "@react-three/drei";
+import TerrestialPlanet from "../../models/terrestialPlanet";
 
 interface Props{
     satellite: SatelliteModel,
@@ -22,15 +23,17 @@ function HollowCircle({radius, segments} : {radius: number, segments: number}) {
     }
   
     return (
-        <Line lineWidth={2} points={circleVertices} color="white" transparent={true} opacity={0.1}></Line>
+        <Line lineWidth={1} points={circleVertices} color="white" transparent={true} opacity={0.1}></Line>
     );
 }
 
-export default function Satellite({satellite, selected = false} : Props){
+export default function Satellite({satellite} : Props){
     const childRef = useRef<THREE.Group>(null);
     const entityRef = useRef<THREE.Group>(null);
     const [startZ, setStartZ] = useState(Math.random() * Math.PI);
-    const distance = (satellite.parent instanceof Celestial) ? (satellite.parent.radius + satellite.distance) : satellite.distance;
+    const parent_radius = ((satellite.parent instanceof Celestial) ? ((satellite.parent instanceof TerrestialPlanet)?(Math.max(satellite.parent.radius, satellite.parent.waterLevel)):satellite.parent.radius + satellite.distance) : satellite.distance);
+    const child_radius = ((satellite.entity instanceof Celestial) ? ((satellite.entity instanceof TerrestialPlanet)?(Math.max(satellite.entity.radius, satellite.entity.waterLevel)):satellite.entity.radius + satellite.distance) : satellite.distance);
+    const distance = parent_radius + child_radius + satellite.distance;
 
     useEffect(() => {
         let rotation = childRef.current?.rotation;
@@ -51,14 +54,13 @@ export default function Satellite({satellite, selected = false} : Props){
 
     return (<>
             <group rotation={[satellite.tiltX, satellite.tiltY, 0]} ref={childRef}>
-                {/* {selected && <HollowCircle radius={distance} segments={32}></HollowCircle>} */}
-                <HollowCircle radius={distance} segments={32}></HollowCircle>
                 <group position={[0,distance,0]} ref={entityRef}>
                     <Renderable renderable={satellite.entity}></Renderable>
                 </group>
+
+                {/* <HollowCircle radius={distance} segments={32}></HollowCircle> */}
             </group>
-            </>
-        );
+        </>);
 
     
 }

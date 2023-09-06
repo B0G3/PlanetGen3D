@@ -1,13 +1,10 @@
 import React from "react";
-import TerrestialPlanet from "../../../models/terrestialPlanet"
+import TerrestialPlanet from "../../models/terrestialPlanet"
 import * as THREE from "three";
 import { createNoise4D } from "simplex-noise";
-import { calculateSphereSurfaceArea } from "../../../utils/helpers";
-import { MAX_PLANET_MOUNTAINOUSNESS, MAX_PLANET_RADIUS, MAX_PLANET_STEEPNESS } from "../../../utils/constants";
-import hexColor from "../../../types/hexColor";
-import { Vector3 } from "@react-three/fiber";
+import { calculateSphereSurfaceArea, colorVariation } from "../../utils/helpers";
+import { MAX_PLANET_MOUNTAINOUSNESS, MAX_PLANET_RADIUS, MAX_PLANET_STEEPNESS } from "../../utils/constants";
 const noise4D = createNoise4D();
-const Color = require('color');
 
 interface Props{
     planet: TerrestialPlanet
@@ -17,14 +14,10 @@ const geometries = {
     PINE_TRUNK_GEOMETRY: new THREE.CylinderGeometry(0.05, 0.05, 0.5, 5, 1),
     PINE_GEOMETRY: new THREE.ConeGeometry(0.25, 0.8, 5),
     OAK_TRUNK_GEOMETRY: new THREE.CylinderGeometry(0.05, 0.05, 0.75, 5, 1),
-    OAK_GEOMETRY: new THREE.SphereGeometry(0.25, 5),
+    OAK_GEOMETRY: new THREE.IcosahedronGeometry(0.25, 1),
     ROCK_GEOMETRY: new THREE.BoxGeometry(0.3, 0.3, 0.3)
 }
 
-const colorVariation = (hex : hexColor, variation = 0.1) => {
-    const random = Math.random() * variation - variation/2;
-    return Color(hex).lighten(random).rgbNumber();
-}
 
 export default function Planet({planet} : Props){
     const RADIUS = planet.radius;
@@ -47,7 +40,7 @@ export default function Planet({planet} : Props){
         {
             // PINE TREE
             density: 8,
-            visible: (e : number) => {return( e > planet.waterLevel + 0.25 && e < planet.waterLevel + 1)}, 
+            visible: (e : number) => {return( e > planet.waterLevel + 0.21 && e < planet.waterLevel + 1)}, 
             meshes: [
                 {
                     ref: React.useRef<THREE.InstancedMesh>(null),
@@ -78,7 +71,7 @@ export default function Planet({planet} : Props){
         {
             // OAK TREE
             density: 2,
-            visible: (e : number) => {return( e > planet.waterLevel + 0.25 && e < planet.waterLevel + 1)}, 
+            visible: (e : number) => {return( e > planet.waterLevel + 0.21 && e < planet.waterLevel + 1)}, 
             meshes: [
                 {
                     ref: React.useRef<THREE.InstancedMesh>(null),
@@ -210,7 +203,7 @@ export default function Planet({planet} : Props){
             let loop = true;
             decals.forEach((d, k) => {
                 d.meshes.forEach(m => {
-                    m.ref.current?.setColorAt(i, color.setHex(colorVariation(m.color.hex, m.color.variation)));
+                    m.ref.current?.setColorAt(i, color.set(colorVariation(m.color.hex, m.color.variation)));
                 })
                 density_cumulative += d.density;
                 // Pick decal based on randomized density
@@ -288,10 +281,10 @@ export default function Planet({planet} : Props){
             }
 
             if(!planet.colors) return;
-            if(shortest <= planet.waterLevel + 0.1 ) color.setHex(colorVariation(planet.colors.sand, 0.2));
-            else if(shortest <= planet.waterLevel + 0.9 ) color.setHex(colorVariation(planet.colors.grass));
-            else if(shortest <= planet.waterLevel + 1.75 ) color.setHex(colorVariation(planet.colors.rock, 0.05))
-            else color.setHex(colorVariation(planet.colors.ice, 0.25))
+            if(shortest <= planet.waterLevel + 0.1 ) color.set(colorVariation(planet.colors.sand, 0.2));
+            else if(shortest <= planet.waterLevel + 0.9 ) color.set(colorVariation(planet.colors.grass));
+            else if(shortest <= planet.waterLevel + 1.75 ) color.set(colorVariation(planet.colors.rock, 0.05))
+            else color.set(colorVariation(planet.colors.ice, 0.25))
 
 
             colors.setXYZ(i * 3, color.r, color.g, color.b);
@@ -303,8 +296,6 @@ export default function Planet({planet} : Props){
         icosahedronGeometry.attributes.position.needsUpdate = true;
     }
     
-  
-
     return (
         <>
             <mesh>
@@ -312,12 +303,11 @@ export default function Planet({planet} : Props){
                 <meshBasicMaterial
                     // wireframe={true}
                     attach="material" 
-                    // color="red"
                     vertexColors={ true }
                 />
             </mesh>
             <mesh>
-                <icosahedronGeometry args={[planet.waterLevel, 4]}/>
+                <icosahedronGeometry args={[planet.waterLevel, 8]}/>
                 <meshBasicMaterial
                     attach="material" color={planet.colors?.water}
                     transparent={true} opacity={0.85}

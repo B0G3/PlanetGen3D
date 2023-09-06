@@ -1,17 +1,16 @@
 import * as THREE from "three";
-import PlanetInterface from "../../interfaces/planet";
-import Celestial from "../../models/celestial";
 import GasPlanet from "../../models/gasPlanet";
 import TerrestialPlanet from "../../models/terrestialPlanet";
-import Satellite from "./satellite";
-import TerrestialPlanetGeometry from "./terrestialPlanet/planet"
+import TerrestialPlanetGeometry from "./terrestialPlanet";
+import PlanetClouds from "./planetClouds";
+import PlanetModel from "../../models/planet";
 
-export default function Planet({planet} : {planet: PlanetInterface}){
-
+export default function Planet({planet} : {planet: PlanetModel}){
     return (<>
         {planet instanceof TerrestialPlanet && <>
             <TerrestialPlanetGeometry planet={planet}></TerrestialPlanetGeometry>
         </>}
+
         {planet instanceof GasPlanet && <mesh>
             <sphereGeometry args={[planet.radius, 16, 16]}></sphereGeometry>
             <meshBasicMaterial
@@ -19,9 +18,9 @@ export default function Planet({planet} : {planet: PlanetInterface}){
                     attach="material" color={"#ffffff"}
             />
         </mesh>}
-        {planet.clouds?.map((e, k) => {
-            <Satellite key={k} satellite={e}></Satellite>
-        })}
+        {/* <Cloud planet={planet as Celestial}></Cloud> */}
+        <PlanetClouds planet={planet}></PlanetClouds>
+
         {(!!planet.ring) && <mesh>
             <ringGeometry args={[planet.ring.startDistance, planet.ring.endDistance, 16]}></ringGeometry>
             <meshBasicMaterial

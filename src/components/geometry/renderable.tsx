@@ -11,6 +11,5 @@ export default function Renderable({renderable} : Props){
         {renderable instanceof CelestialModel &&
             <Celestial celestial={renderable}></Celestial>
         }
-        {/* TODO: Other entities - clouds, ufo? etc. */}
     </>)
 }

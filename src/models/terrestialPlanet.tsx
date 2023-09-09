@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { generateName } from '../utils/helpers';
 import { MAX_PLANET_MOUNTAINOUSNESS, MAX_PLANET_RADIUS, MAX_PLANET_STEEPNESS, MIN_PLANET_RADIUS, PLANET_COLORS } from '../utils/constants';
 import PlanetColors from '../interfaces/planetColors';
-import PlanetRing from '../interfaces/planetRing';
 import Planet from './planet';
 
 export default class TerrestialPlanet extends Planet{
@@ -11,9 +10,7 @@ export default class TerrestialPlanet extends Planet{
     mountainousness: number = 5;
     detailCount: number = 0;
     cloudCount: number = 0;
-
-    colors?: PlanetColors;
-    ring?: PlanetRing
+    colors!: PlanetColors;
 
     constructor(position: THREE.Vector3 = new THREE.Vector3(0,0,0), radius: number = 5){
       super(position, radius);

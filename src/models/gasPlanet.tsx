@@ -5,7 +5,7 @@ import Satellite from "./satellite";
 
 export default class GasPlanet extends Planet{
     color: hexColor = '#ffffff';
-    clouds?: Array<Satellite>;
-    ring?: PlanetRing;
+    coreColor: hexColor = '#afafaf'
     cloudCount: number = 0;
+    coreRadius: number = 5;
 }

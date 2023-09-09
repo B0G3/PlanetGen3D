@@ -1,11 +1,11 @@
 import React from "react";
-import TerrestialPlanet from "../../models/terrestialPlanet";
-import Star from "../../models/star";
-import CelestialModel from "../../models/celestial";
-import GasPlanet from "../../models/gasPlanet";
-import PlanetGeometry from "../geometry/planet";
-import StarGeometry from "../geometry/star";
-import SatelliteGeometry from "../geometry/satellite";
+import TerrestialPlanet from "../../../models/terrestialPlanet";
+import Star from "../../../models/star";
+import CelestialModel from "../../../models/celestial";
+import GasPlanet from "../../../models/gasPlanet";
+import PlanetGeometry from "./planet";
+import StarGeometry from "./star";
+import SatelliteGeometry from "../satellite";
 
 interface Props{
     celestial: CelestialModel

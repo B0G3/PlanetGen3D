@@ -1,9 +1,10 @@
 import * as THREE from "three";
-import GasPlanet from "../../models/gasPlanet";
-import TerrestialPlanet from "../../models/terrestialPlanet";
-import TerrestialPlanetGeometry from "./terrestialPlanet";
+import GasPlanet from "../../../models/gasPlanet";
+import TerrestialPlanet from "../../../models/terrestialPlanet";
+import TerrestialPlanetGeometry from "./terrestial/terrestialPlanet";
+import GasPlanetGeometry from "./gasPlanet";
 import PlanetClouds from "./planetClouds";
-import PlanetModel from "../../models/planet";
+import PlanetModel from "../../../models/planet";
 
 export default function Planet({planet} : {planet: PlanetModel}){
     return (<>
@@ -11,22 +12,16 @@ export default function Planet({planet} : {planet: PlanetModel}){
             <TerrestialPlanetGeometry planet={planet}></TerrestialPlanetGeometry>
         </>}
 
-        {planet instanceof GasPlanet && <mesh>
-            <sphereGeometry args={[planet.radius, 16, 16]}></sphereGeometry>
-            <meshBasicMaterial
-                    side={THREE.DoubleSide}
-                    attach="material" color={"#ffffff"}
-            />
-        </mesh>}
-        {/* <Cloud planet={planet as Celestial}></Cloud> */}
+        {planet instanceof GasPlanet && <>
+            <GasPlanetGeometry planet={planet}></GasPlanetGeometry>
+        </>}
         <PlanetClouds planet={planet}></PlanetClouds>
-
-        {(!!planet.ring) && <mesh>
+        {/* {(!!planet.ring) && <mesh>
             <ringGeometry args={[planet.ring.startDistance, planet.ring.endDistance, 16]}></ringGeometry>
             <meshBasicMaterial
                     side={THREE.DoubleSide}
                     attach="material" color={"#ffffff"}
             />
-        </mesh>}
+        </mesh>} */}
     </>)
 }

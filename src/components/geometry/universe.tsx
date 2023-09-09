@@ -1,12 +1,12 @@
 import * as THREE from "three"
 import React from "react";
 import { CameraControls } from '@react-three/drei';
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import Background from "./background";
 import Celestial from "../../models/celestial";
 import Renderable from "../../models/renderable";
 import Satellite from "../../models/satellite";
-import CelestialGeometry from "./celestial"
+import CelestialGeometry from "./celestial/celestial"
 import { MAX_PLANET_RADIUS } from "../../utils/constants";
 
 interface Props{
@@ -15,10 +15,16 @@ interface Props{
 }
 
 export default function Universe({celestials, selectedEntity} : Props){
+    const { camera } = useThree();
 	const cameraControlRef = React.useRef<CameraControls | null>(null);
     const [minDistance, setMinDistance] = React.useState(0);
     const v3 = new THREE.Vector3();
     const [cameraPosition, setCameraPosition] = React.useState<THREE.Vector3>(v3);
+
+    React.useEffect(() => {
+        camera.far = 100000;
+        camera.updateProjectionMatrix();
+    }, [])
 
     // React.useEffect(()=>{
     //     if(!selectedEntity) return;
@@ -63,7 +69,7 @@ export default function Universe({celestials, selectedEntity} : Props){
                 <CelestialGeometry key={e.id} celestial={e}></CelestialGeometry> 
             )}
         </group>
-		<CameraControls smoothTime={0.1} minDistance={minDistance} maxDistance={120} ref={cameraControlRef}/>
-        <Background position={cameraPosition}></Background>
+		<CameraControls makeDefault smoothTime={0.15} minDistance={minDistance} maxDistance={120} ref={cameraControlRef}/>
+        <Background></Background>
     </>);
 }

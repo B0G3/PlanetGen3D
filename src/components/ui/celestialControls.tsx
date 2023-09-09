@@ -15,8 +15,14 @@ interface Props{
     setSelectedEntity: Function
 }
 
+interface AddCelestialForm{
+    visible: boolean,
+    sequence: Array<number>
+}
+
 export default function CelestialControls({celestials, setCelestials, selectedEntity, setSelectedEntity} : Props){
     const [currentSequence, setCurrentSequence] = React.useState<Array<number>>([]);
+    const [showDialog, setShowDialog] = React.useState<boolean>(false);
     const findEntityBySequence = (indexSequence : Array<number>) => {
         const _entities = [...celestials];
         let currentItem : Celestial | Satellite = _entities[indexSequence[0]];
@@ -101,6 +107,22 @@ export default function CelestialControls({celestials, setCelestials, selectedEn
         setCelestials(_entities);
     }
 
+    const addEntity = (indexSequence : Array<number>) => {
+        setShowDialog(true);
+        // setCelestialForm({
+        //     visible: true,
+        //     sequence: indexSequence
+        // })
+    }
+
+    // const closeAddEntity = () => {
+    //     setCelestialForm((prev) => {
+    //         console.log(prev);
+    //         if(prev) prev.visible = !prev.visible;                
+    //         return prev;
+    //     })
+    // }
+
     const updateSatellite = (data: Object) => {
         updateEntity(currentSequence, data, false);
     }
@@ -111,10 +133,25 @@ export default function CelestialControls({celestials, setCelestials, selectedEn
 
     return (
        <>
+            {showDialog && <div className="modal-wrapper">
+                <div className="modal">
+                    <div className="control-box">
+                        <div className="title">
+                            Add celestial
+                            <div className="buttons">
+                                <button onClick={()=>setShowDialog(false)}>CLOSE</button>
+                            </div>
+                        </div>
+                        <div>
+                            <button onClick={()=>null}>Planet</button>
+                        </div>
+                    </div>
+                </div>
+            </div>}
             <div className="controls-wrapper">
                 <div className="control-box">
                     <div id="entity-list">
-                        {celestials.map((e, k) => <CelestialControlsItem key={e.id} entity={e} selectEntity={selectEntity} deleteEntity={deleteEntity} sequence={[k]} currentSequence={currentSequence}></CelestialControlsItem>)}
+                        {celestials.map((e, k) => <CelestialControlsItem key={e.id} entity={e} selectEntity={selectEntity} deleteEntity={deleteEntity} addEntity={addEntity} sequence={[k]} currentSequence={currentSequence}></CelestialControlsItem>)}
                     </div>
                 </div>
                 <div className="control-box">

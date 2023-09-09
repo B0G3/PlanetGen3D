@@ -6,6 +6,7 @@ import { MAX_PLANET_MOUNTAINOUSNESS, MAX_PLANET_RADIUS, MAX_PLANET_STEEPNESS, MA
 import Star from "../../models/star";
 import {GithubPicker} from 'react-color'
 import hexColor from "../../types/hexColor";
+import GasPlanet from "../../models/gasPlanet";
 interface Props{
     data:  Celestial;
     update: Function;
@@ -105,7 +106,7 @@ export default function CelestialControl({data, update} : Props){
                     <label>Cloud count</label>
                     <Slider
                         min={0}
-                        max={20}
+                        max={100}
                         value={(editedObject.cloudCount??0)}
                         onChange={(e)=>handleInputChange('cloudCount', e)}
 
@@ -173,6 +174,42 @@ export default function CelestialControl({data, update} : Props){
                         renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
                     />
                 </div>
+                <div className="control-item">
+                    <label>Color</label>
+                    <input type="color" value={editedObject.color} onChange={(e) => handleInputChange('color', e.target.value)}/>
+                </div>
+                </>
+            }
+            {data instanceof GasPlanet && 
+                <>
+                <div className="control-item">
+                    <label>Radius</label>
+                    <Slider
+                        min={MIN_STAR_RADIUS}
+                        max={MAX_STAR_RADIUS}
+                        value={editedObject.radius}
+                        onChange={(e)=>handleInputChange('radius', e)}
+
+                        className="horizontal-slider"
+                        thumbClassName="thumb"
+                        trackClassName="track"
+                        renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                    />
+                </div>
+                {/* <div className="control-item">
+                    <label>Fluctuations</label>
+                    <Slider
+                        min={0}
+                        max={100}
+                        value={(editedObject?.fluctuations??0) * 50}
+                        onChange={(e)=>handleInputChange('fluctuations', e/50)}
+
+                        className="horizontal-slider"
+                        thumbClassName="thumb"
+                        trackClassName="track"
+                        renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                    />
+                </div> */}
                 <div className="control-item">
                     <label>Color</label>
                     <input type="color" value={editedObject.color} onChange={(e) => handleInputChange('color', e.target.value)}/>

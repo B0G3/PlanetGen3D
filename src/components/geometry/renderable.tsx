@@ -1,6 +1,6 @@
 import CelestialModel from "../../models/celestial"
 import RenderableModel from "../../models/renderable"
-import Celestial from "./celestial"
+import Celestial from "./celestial/celestial"
 
 interface Props{
     renderable: RenderableModel

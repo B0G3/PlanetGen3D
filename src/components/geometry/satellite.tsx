@@ -58,7 +58,7 @@ export default function Satellite({satellite} : Props){
                     <Renderable renderable={satellite.entity}></Renderable>
                 </group>
 
-                {/* <HollowCircle radius={distance} segments={32}></HollowCircle> */}
+                <HollowCircle radius={distance} segments={32}></HollowCircle>
             </group>
         </>);
 

@@ -72,8 +72,8 @@ export default function SatelliteControl({data, update} : Props){
             <div className="control-item">
                 <label>X-Axis tilt</label>
                 <Slider
-                    min={-Math.PI * 1000}
-                    max={Math.PI * 1000}
+                    min={-Math.PI/2 * 1000}
+                    max={Math.PI/2 * 1000}
                     value={editedObject.tiltX * 1000}
                     onChange={(e)=>handleInputChange('tiltX', e / 1000)}
 
@@ -86,8 +86,8 @@ export default function SatelliteControl({data, update} : Props){
             <div className="control-item">
                 <label>Y-Axis tilt</label>
                 <Slider
-                    min={-Math.PI * 1000}
-                    max={Math.PI * 1000}
+                    min={-Math.PI/2 * 1000}
+                    max={Math.PI/2 * 1000}
                     value={editedObject.tiltY * 1000}
                     onChange={(e)=>handleInputChange('tiltY', e / 1000)}
 

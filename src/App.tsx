@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 // import './App.css';
 import './App.scss';
-import { createRandomPlanet, solarSystem, earth } from './utils/generator';
+import {solarSystem} from './utils/generator';
 import Star from './models/star';
 import Celestial from './models/celestial';
 import { Canvas } from '@react-three/fiber';

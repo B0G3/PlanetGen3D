@@ -44,7 +44,7 @@ export default function({star} : {star: Star}){
             const noise = noise4D(startPositions[i].x, startPositions[i].y, startPositions[i].z, count) * (star.fluctuations + 0.25);
             const part = Math.round(noise * 4) / 4;
 
-            if(i%3===0){
+            if(i%3===2){
                 const hex = colord(star.color).darken(part/4).toHex();
                 color.set(hex);
 

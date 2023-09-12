@@ -81,7 +81,6 @@ export const PLANET_COLORS : any = { // TODO: change any
         '#20B2AA', // Light Sea Green
         '#5F9EA0'  // Cadet Blue
     ],
-    lava: ['#d45d35']
 }
 
 export const PLANET_NAME_ADJECTIVES = [

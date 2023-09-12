@@ -22,8 +22,8 @@ export default function PlanetDetails({planet, noiseValue}: Props){
     const DECAL_TYPES = [
         {
             // PINE TREE
-            density: 8,
-            visible: (e : number) => {return( e >= planet.waterLevel + 0.20 && e <= planet.waterLevel + 0.9)}, 
+            density: 4,
+            visible: (e : number) => {return( planet.enableVegetation && e >= planet.waterLevel + 0.25 && e <= planet.waterLevel + 0.9)}, 
             meshes: [
                 {
                     ref: React.useRef<THREE.InstancedMesh>(null),
@@ -54,7 +54,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
         {
             // OAK TREE
             density: 2,
-            visible: (e : number) => {return( e >= planet.waterLevel + 0.2 && e <= planet.waterLevel + 1)}, 
+            visible: (e : number) => {return( planet.enableVegetation && e >= planet.waterLevel + 0.25 && e <= planet.waterLevel + 1)}, 
             meshes: [
                 {
                     ref: React.useRef<THREE.InstancedMesh>(null),
@@ -91,7 +91,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
                     ref: React.useRef<THREE.InstancedMesh>(null),
                     geometry: GEOMETRIES.ROCK_GEOMETRY,
                     material: MATERIAL_DARKEN,
-                    height_offset: -0.05,
+                    height_offset: -0.02,
                     color: {
                         hex: planet.colors?.rock ?? "#ffffff",
                         variation: 0.1
@@ -144,10 +144,10 @@ export default function PlanetDetails({planet, noiseValue}: Props){
             noise = noiseValue(e);
             v3.copy(e).multiplyScalar(planet.radius).addScaledVector(e, noise);
             let v3_length = v3.length();
-            if(v3_length < planet.waterLevel + 0.1 ){
-                v3.setLength(Math.max(v3_length - 0.2, planet.radius/2));
-                v3_length = v3.length();
-            }
+            // if(v3_length < planet.waterLevel + 0.1 ){
+            //     v3.setLength(Math.max(v3_length - 0.1, planet.radius/2));
+            //     v3_length = v3.length();
+            // }
             const point = v3.clone();
 
             // Generate random value from 1 to total density
@@ -195,7 +195,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
 
     React.useEffect(()=>{
         generateDecals();
-    }, [planet.detailCount, planet.waterLevel, planet.steepness, planet.mountainousness])
+    }, [planet.enableVegetation, planet.detailCount, planet.waterLevel, planet.steepness, planet.mountainousness])
 
 
     return (

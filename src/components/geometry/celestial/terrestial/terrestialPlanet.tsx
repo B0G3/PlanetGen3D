@@ -44,7 +44,9 @@ export default function Planet({planet} : Props){
         noise += 0.5 * noise4D(vector.x * NOISE_FREQUENCY * 2, vector.y * NOISE_FREQUENCY * 2, vector.z * NOISE_FREQUENCY * 2, SEED);
         noise += 0.25 * noise4D(vector.x * NOISE_FREQUENCY * 4, vector.y * NOISE_FREQUENCY * 4, vector.z * NOISE_FREQUENCY * 4, SEED);
         noise *= (MOUNTAINOUSNESS_MULTIPLIER ) * 8;
-        return noise;
+        
+        // if(noise < 0.05) noise -= 0.25;
+        return Math.round(noise * 4) / 4;
     }
 
     const planetGeometry = React.useMemo(()=>{
@@ -62,12 +64,9 @@ export default function Planet({planet} : Props){
 
             basePosition.fromBufferAttribute(positions, i).normalize();
             noise = getNoiseValue(basePosition);
-            const part = Math.round(noise * 4) / 4; // round to every 0.25
-            // console.log(part);
 
-            v3.copy(basePosition).multiplyScalar(planet.radius).addScaledVector(basePosition, part + 0.005);
+            v3.copy(basePosition).multiplyScalar(planet.radius).addScaledVector(basePosition, noise + 0.005);
             v3.clampLength(-planet.radius/2, MAX_HEIGHT)
-            // v3.setLength(Math.round((v3.length()) * 4) / 4)
             positions.setXYZ(i, v3.x, v3.y, v3.z);
 
             if(i%3 === 2){
@@ -80,20 +79,27 @@ export default function Planet({planet} : Props){
                 const shortest = Math.min(vertA_length, vertB_length, vertC_length);
 
 
-                if(vertA_length < planet.waterLevel + 0.1 ){
-                    vertA.setLength(Math.max(vertA_length - 0.1, planet.radius/2));
-                    positions.setXYZ(k * 3, vertA.x, vertA.y, vertA.z);
-                }
-                if(vertB_length < planet.waterLevel + 0.1 ){
-                    vertB.setLength(Math.max(vertB_length - 0.1, planet.radius/2));
-                    positions.setXYZ(k * 3 + 1, vertB.x, vertB.y, vertB.z);
-                }
-                if(vertC_length < planet.waterLevel + 0.1 ){
-                    vertC.setLength(Math.max(vertC_length - 0.1, planet.radius/2));
-                    positions.setXYZ(k * 3 + 2, vertC.x, vertC.y, vertC.z);
-                }
+                // if(vertA_length < planet.waterLevel + 0.1 ){
+                //     vertA.setLength(Math.max(vertA_length - 0.1, planet.radius/2));
+                //     positions.setXYZ(k * 3, vertA.x, vertA.y, vertA.z);
+                // }
+                // if(vertB_length < planet.waterLevel + 0.1 ){
+                //     vertB.setLength(Math.max(vertB_length - 0.1, planet.radius/2));
+                //     positions.setXYZ(k * 3 + 1, vertB.x, vertB.y, vertB.z);
+                // }
+                // if(vertC_length < planet.waterLevel + 0.1 ){
+                //     vertC.setLength(Math.max(vertC_length - 0.1, planet.radius/2));
+                //     positions.setXYZ(k * 3 + 2, vertC.x, vertC.y, vertC.z);
+                // }
 
-                if(shortest < planet.waterLevel + 0.1 ) color.set(colorVariation(colord(planet.colors.sand), 0.2).darken(Math.min((planet.waterLevel - shortest)*2/planet.radius,0.6)).toHex());
+                // darken(Math.min((planet.waterLevel - shortest)*2/planet.radius,0.6)
+                if(shortest < planet.waterLevel + 0.125 ){ 
+                    let dist = (planet.waterLevel - shortest)/planet.radius;
+                    dist = Math.min(Math.round(dist * 5 ) / 5, 0.6);
+
+                    color.set(colorVariation(colord(planet.colors.sand), 0.2).darken(dist).toHex());
+                
+                }
                 else if(shortest < planet.waterLevel + 0.9 ) color.set(colorVariation(colord(planet.colors.grass), 0.05).toHex());
                 else if(shortest < planet.waterLevel + 1.75 ) color.set(colorVariation(colord(planet.colors.rock), 0.05).toHex())
                 else color.set(colorVariation(colord(planet.colors.ice), 0.15).toHex())
@@ -114,112 +120,6 @@ export default function Planet({planet} : Props){
 
     },[DETAIL, planet.waterLevel, planet.steepness, planet.mountainousness])
 
-    // // GENERATE FIBONACCI
-    // const fibonacciPoints = React.useMemo(()=>{
-    //     const points = [];
-    //     const NUM_POINTS = MAX_DECAL_COUNT * RADIUS_MULTIPLIER * RADIUS_MULTIPLIER;
-    //     const yOffset = 2 / NUM_POINTS;
-    //     const phi = Math.PI * (3.0 - Math.sqrt(5.0));
-    //     for (let i = 0; i < NUM_POINTS; i++) {
-    //         const y = i * yOffset - 1 + yOffset / 2;
-    //         const r = Math.sqrt(1 - y * y);
-    //         const theta = phi * i;
-    //         const x = Math.cos(theta) * r;
-    //         const z = Math.sin(theta) * r;
-    //         const variation = Math.random() * 1 - 0.5;
-    //         // const variation = 0;
-    //         v3.set(x + variation, y + variation, z + variation).normalize();
-    //         points.push(v3.clone());
-    //     }
-    //     return points;
-    // }, [RADIUS_MULTIPLIER, MAX_DECAL_COUNT])
-
-    // SET BASE POSITIONS
-    // React.useEffect(()=>{
-    //     const arr = [];
-    //     const positions = icosahedronGeometry.attributes.position;
-    //     for (let i = 0; i < positions.count; i++){
-    //         v3.fromBufferAttribute(positions, i).normalize();
-    //         arr.push(v3.clone());
-    //     }
-    //     setBasePositions(arr);
-    // }, [icosahedronGeometry])
-
-    // GENERATE VISUALS
-    // React.useEffect(()=>{
-    //     generatePlanet();
-    //     // generateDecals();
-    // }, [basePositions, planet.waterLevel, planet.steepness, planet.mountainousness])
-    // React.useEffect(()=>{
-    //     generateDecals();
-    // }, [planet.detailCount])
-
-
-    // const generateDecals = () => {
-    //     // DECALS
-    //     let j = 0;
-    //     let noise = 0;
-    //     const upVector = new THREE.Vector3(0, 1, 0);
-    //     const decal_count : Array<number> = []
-    //     let total_density : number = 0;
-    //     decals.forEach((d, k) => {
-    //         decal_count[k] = 0;
-    //         total_density += d.density;
-    //     })
-
-    //     fibonacciPoints.forEach((e, i) => {
-    //         noise = getNoiseValue(e);
-    //         v3.copy(e).multiplyScalar(planet.radius).addScaledVector(e, noise);
-    //         let v3_length = v3.length();
-    //         if(v3_length < planet.waterLevel + 0.1 ){
-    //             v3.setLength(Math.max(v3_length - 0.2, planet.radius/2));
-    //             v3_length = v3.length();
-    //         }
-    //         const point = v3.clone();
-
-    //         // Generate random value from 1 to total density
-    //         const density_threshold = Math.floor(Math.random() * total_density) + 1;
-    //         let density_cumulative = 0;
-    //         let loop = true;
-    //         decals.forEach((d, k) => {
-    //             d.meshes.forEach(m => {
-    //                 color.set(colorVariation(colord(m.color.hex), m.color.variation));
-    //                 m.ref.current?.setColorAt(i, color);
-    //             })
-    //             density_cumulative += d.density;
-    //             // Pick decal based on randomized density
-    //             if (loop && density_cumulative >= density_threshold) {
-    //                 if(d.visible(v3_length)){
-                        
-    //                     d.meshes.forEach(m => {
-    //                         const size = 1 - m.size_variation/2 + m.size_variation * Math.random();
-    //                         if(m.randomize_rotation) quaternion.setFromUnitVectors(upVector, new THREE.Vector3(Math.random(),Math.random(),Math.random()));
-    //                         else quaternion.setFromUnitVectors(upVector, point.normalize());
-                            
-    //                         matrix.compose(v3.setLength(v3_length + m.height_offset), quaternion, new THREE.Vector3(size, size, size));
-                        
-    //                         if(m.ref && m.ref.current) {
-    //                             m.ref.current.setMatrixAt(decal_count[k], matrix);
-    //                         }
-    //                     })
-    //                     decal_count[k] = decal_count[k] + 1;
-    //                 }
-                    
-    //                 loop = false;
-    //             }
-    //         })
-    //     })
-
-    //     decals.forEach((d, k) => {
-    //         d.meshes.forEach(m => {
-    //             if(m.ref && m.ref.current) {
-    //                 m.ref.current.count = decal_count[k];
-    //                 m.ref.current.instanceMatrix.needsUpdate = true;
-    //             }
-    //         })
-    //     })
-    // }
-
     return (
         <>
                 <mesh>
@@ -229,22 +129,10 @@ export default function Planet({planet} : Props){
                         vertexColors={ true }
                     />
                 </mesh>
-                <PlanetWater planet={planet} noiseValue={getNoiseValue}></PlanetWater>
+                { planet.enableWater &&
+                    <PlanetWater planet={planet} noiseValue={getNoiseValue}></PlanetWater>
+                }
                 <PlanetDetails planet={planet} noiseValue={getNoiseValue}></PlanetDetails>
-
-
-
-
-                {/* {decals.map((d, i) => (
-                    d.meshes.map((m, j) => (
-                        <instancedMesh
-                        key={`decal-${i}-${j}`}
-                        ref={m.ref}
-                        args={[m.geometry, m.material, fibonacciPoints.length]}
-                        ></instancedMesh>
-                    ))
-                ))}
-             */}
         </>
        
     )

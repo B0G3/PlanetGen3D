@@ -20,6 +20,7 @@ function degreesToRadians(degrees: number): number {
 
 export default function SatelliteControl({data, update} : Props){
     const [editedObject, setEditedObject] = React.useState<SatelliteInterface>({ ...data });
+    const [collapsed, setCollapsed] = React.useState(false);
 
     const handleInputChange = (name : string, value : number) => {
         setEditedObject((prev) => ({ ...prev, [name]: value }));
@@ -40,8 +41,9 @@ export default function SatelliteControl({data, update} : Props){
 
     return (
         <div>
-            <div className="title">ORBIT CONTROLS</div>
-            <div className="control-item">
+            <div onClick={()=>setCollapsed(!collapsed)} className="title">ORBIT CONTROLS</div>
+            {!collapsed && <>
+                <div className="control-item">
                 <label>Distance</label>
                 <Slider
                     min={0}
@@ -97,6 +99,7 @@ export default function SatelliteControl({data, update} : Props){
                     renderThumb={(props, state) => <div {...props}>{Math.round(radiansToDegrees(state.valueNow / 1000))}</div>}
                 />
             </div>
+            </>}
         </div>
     )
 }

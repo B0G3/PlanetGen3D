@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { generateName } from '../utils/helpers';
-import { MAX_PLANET_MOUNTAINOUSNESS, MAX_PLANET_RADIUS, MAX_PLANET_STEEPNESS, MIN_PLANET_RADIUS, PLANET_COLORS } from '../utils/constants';
+import { MAX_PLANET_MOUNTAINOUSNESS, MAX_PLANET_RADIUS, MAX_PLANET_STEEPNESS, MIN_PLANET_MOUNTAINOUSNESS, MIN_PLANET_RADIUS, PLANET_COLORS } from '../utils/constants';
 import PlanetColors from '../interfaces/planetColors';
 import Planet from './planet';
 
@@ -10,13 +10,13 @@ export default class TerrestialPlanet extends Planet{
     mountainousness: number = 5;
     detailCount: number = 0;
     cloudCount: number = 0;
+    enableWater: boolean = false;
+    enableVegetation: boolean = false;
     colors!: PlanetColors;
 
     constructor(position: THREE.Vector3 = new THREE.Vector3(0,0,0), radius: number = 5){
       super(position, radius);
-      this.waterLevel = radius - 0.5;
-
-      this.randomize(radius);
+      this.randomize();
     }
 
     setWaterLevel(level: number){
@@ -46,17 +46,33 @@ export default class TerrestialPlanet extends Planet{
       this.colors =  colors;
     }
 
-    randomize(RADIUS: number | undefined){
-      const radius = RADIUS ?? Math.max(Math.ceil(Math.random() * MAX_PLANET_RADIUS - 1), MIN_PLANET_RADIUS + 1);
-      const waterLevel = radius - (Math.random() - 0.5);
-      const stepness = (waterLevel >= radius) ? (Math.random() * (MAX_PLANET_STEEPNESS - 4) + 4) : (Math.random() * (MAX_PLANET_STEEPNESS - 3) + 2);
-      const mountainousness = Math.random() * (MAX_PLANET_MOUNTAINOUSNESS - 2);
+    randomize(){
+      // const radius = RADIUS ?? Math.max(Math.ceil(Math.random() * MAX_PLANET_RADIUS - 1), MIN_PLANET_RADIUS + 1);
+      const waterLevel = this.radius - (Math.random() - 0.25);
+      const stepness = (waterLevel >= this.radius) ? (Math.random() * (MAX_PLANET_STEEPNESS - 4) + 4) : (Math.random() * (MAX_PLANET_STEEPNESS - 3) + 2);
+      
+      let mountainousness = 0;
+      const waterChance = 0.4;
+      if(Math.random()<=waterChance){ // exo planet
+        this.enableWater = true;
+        this.cloudCount = 2 + Math.floor(this.radius/2) + Math.random() * (this.radius/2);
+        mountainousness = Math.random() * Math.max(MIN_PLANET_MOUNTAINOUSNESS, (MAX_PLANET_MOUNTAINOUSNESS - 2)) + 2;
+
+        const vegetationChange = 0.75;
+        if(Math.random() <= vegetationChange){
+          this.enableVegetation = true;
+        }
+
+      }else{
+        mountainousness = Math.random() * Math.max(MIN_PLANET_MOUNTAINOUSNESS, (MAX_PLANET_MOUNTAINOUSNESS - 4)) + 4;
+      }
+
 
       this.name = generateName();
-      this.radius = radius;
       this.waterLevel = waterLevel;
       this.steepness = stepness;
       this.mountainousness = mountainousness;
+      this.detailCount = 2 + Math.random()*8;
       this.randomizeColors();
     }
 }

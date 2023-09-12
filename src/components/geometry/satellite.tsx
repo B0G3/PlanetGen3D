@@ -45,11 +45,6 @@ export default function Satellite({satellite} : Props){
         let rotation = childRef.current?.rotation;
         let speed = (satellite.speed * delta * 10 )/ distance;
         if(rotation) childRef.current?.rotation.set(rotation.x, rotation.y, rotation.z + speed);
-
-        // Celestial rotation
-        rotation = entityRef.current?.rotation;
-        speed = (satellite.speed * delta * 10 )/ distance;
-        if(rotation) entityRef.current?.rotation.set(rotation.x, rotation.y, rotation.z + speed);
     })
 
     return (<>

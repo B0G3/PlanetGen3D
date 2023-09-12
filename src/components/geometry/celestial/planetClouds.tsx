@@ -6,11 +6,12 @@ import { createNoise4D } from "simplex-noise";
 import { useFrame } from "@react-three/fiber";
 import Planet from "../../../models/planet";
 import { colord } from "colord";
+import hexColor from "../../../types/hexColor";
 const noise4D = createNoise4D();
 
 const cloudMaterial = new THREE.MeshBasicMaterial({ color: "white", vertexColors: true });
 
-function Cloud({distance, direction} : {distance: number, direction: THREE.Vector3}){
+function Cloud({distance, direction, hexColor} : {distance: number, direction: THREE.Vector3, hexColor: hexColor}){
     const v3 = new THREE.Vector3();
     const offset = new THREE.Vector3();
     const ref = React.useRef<THREE.InstancedMesh>(null);
@@ -32,7 +33,7 @@ function Cloud({distance, direction} : {distance: number, direction: THREE.Vecto
             v3.fromBufferAttribute(positions, i);
 
             const noise = noise4D(v3.x, v3.y, v3.z, seed)
-            const hex = colorVariation(colord("#cfcfcf"), 0.2).toHex();
+            const hex = colorVariation(colord(hexColor), 0.2).toHex();
             color.set(hex);
 
             if(i%3===0){
@@ -47,7 +48,7 @@ function Cloud({distance, direction} : {distance: number, direction: THREE.Vecto
         }
 
         return geometry;
-    }, [])
+    }, [hexColor])
 
     const matrix = new THREE.Matrix4();
     const quaternion = new THREE.Quaternion();
@@ -130,7 +131,7 @@ export default function PlanetClouds({planet} : {planet: Planet}){
     return (
         <>
             {fibonacciPoints.map((e, k) => 
-                <Cloud key={k} distance={distance} direction={e}></Cloud>
+                <Cloud key={k} distance={distance} direction={e} hexColor={planet.cloudColor}></Cloud>
             )}
         </>
     )

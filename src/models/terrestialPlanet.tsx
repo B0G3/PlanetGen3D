@@ -4,6 +4,11 @@ import { MAX_PLANET_MOUNTAINOUSNESS, MAX_PLANET_RADIUS, MAX_PLANET_STEEPNESS, MI
 import PlanetColors from './planetColors';
 import Planet from './planet';
 
+import mixPlugin from "colord/plugins/mix";
+import { colord, extend } from 'colord';
+import hexColor from '../types/hexColor';
+extend([mixPlugin]);
+
 export default class TerrestialPlanet extends Planet{
     waterLevel: number = 5;
     steepness: number = 5;
@@ -33,21 +38,8 @@ export default class TerrestialPlanet extends Planet{
 
     setColors(colors: PlanetColors){
       this.colors = colors;
-
-      // compute colors
     }
-
-    // randomizeColors(){
-    //   const colors  = Object.keys(PLANET_COLORS).reduce((prev, val , i) => {
-    //     return {
-    //         ...prev, 
-    //         [val]: PLANET_COLORS[val][(Math.floor(Math.random() * PLANET_COLORS[val].length))]
-    //     }
-    //   }, {} as PlanetColors)
-
-    //   this.setColors(colors);
-    // }
-
+    
     randomize(){
       const waterLevel = this.radius - (Math.random() - 0.5);
       const stepness = (waterLevel >= this.radius) ? (Math.random() * (MAX_PLANET_STEEPNESS - 4) + 4) : (Math.random() * (MAX_PLANET_STEEPNESS - 3) + 2);
@@ -78,5 +70,6 @@ export default class TerrestialPlanet extends Planet{
       const planetColors = new PlanetColors();
       planetColors.randomize();
       this.setColors(planetColors);
+      this.cloudColor = colord(this.colors.computed.ice[1]).mix(this.colors.computed.water[1]).lighten(0.1).toHex() as hexColor;
     }
 }

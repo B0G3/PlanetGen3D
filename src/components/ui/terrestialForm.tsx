@@ -84,7 +84,10 @@ export default function TerrestialForm({data, update}: Props){
                         renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
                     />
                 </div>
-                {/* <hr></hr>   */}
+                <div className="control-item">
+                    <label>Cloud color</label>
+                    <input type="color" value={data.cloudColor} onChange={(e) => update({cloudColor: e.target.value})}/>
+                </div>
                 <div className="control-item">
                     <label>Detail count</label>
                     <Slider

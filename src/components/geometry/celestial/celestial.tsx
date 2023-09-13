@@ -18,10 +18,10 @@ export default function Celestial({celestial} : Props){
         celestial.setGeometry(ref.current);
     }, [ref])
 
-    useFrame(()=>{
-        const rotation = ref.current?.rotation;
-        if(rotation) ref.current?.rotation.set(rotation.x, rotation.y, rotation.z + 0.0002);
-    })
+    // useFrame(()=>{
+    //     const rotation = ref.current?.rotation;
+    //     if(rotation) ref.current?.rotation.set(rotation.x, rotation.y, rotation.z + 0.0002);
+    // })
 
     return <>
         <group ref={ref} position={celestial.position}>

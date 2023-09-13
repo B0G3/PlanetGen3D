@@ -8,8 +8,8 @@ import Celestial from './models/celestial';
 import { Canvas } from '@react-three/fiber';
 import Universe from './components/geometry/universe';
 import { Vector3 } from 'three';
-import CelestialControls from './components/ui/celestialControls';
 import {Stats} from '@react-three/drei'
+import Controls from './components/ui/controls';
 
 const CELESTIALS: Array<Celestial> = [];
 // const earth2 = earth();
@@ -34,12 +34,12 @@ const App = () => {
             // setCelestials={setCelestials}
           ></Universe>
       </Canvas>
-      <CelestialControls
+      <Controls
         selectedEntity={entity}
         celestials={celestials}
         setSelectedEntity={setEntity}
         setCelestials={setCelestials}
-      ></CelestialControls>
+      ></Controls>
   </div>
   );
 }

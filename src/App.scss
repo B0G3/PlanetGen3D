@@ -3,6 +3,7 @@
 html * {
     font-family: "VT323", system-ui;
     text-transform: uppercase;
+    font-size: 14px;
 }
 
 .canvas-background{
@@ -291,4 +292,11 @@ input[type=text]{
         }
     }
   }
+}
+
+.planet-color-controls{
+    text-align: center;
+    display: grid;
+    column-gap: 2px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }

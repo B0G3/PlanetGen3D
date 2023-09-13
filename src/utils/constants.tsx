@@ -4,7 +4,7 @@ export const MIN_PLANET_RADIUS : number = 1;
 export const MAX_STAR_RADIUS : number = 60;
 export const MIN_STAR_RADIUS : number = 1;
 
-export const MAX_PLANET_STEEPNESS : number = 10;
+export const MAX_PLANET_STEEPNESS : number = 20;
 export const MIN_PLANET_STEEPNESS : number = 0;
 
 export const MAX_PLANET_MOUNTAINOUSNESS : number = 10;
@@ -82,6 +82,22 @@ export const PLANET_COLORS : any = { // TODO: change any
         '#5F9EA0'  // Cadet Blue
     ],
 }
+
+export const PLANET_PRESETS = [
+    {ice: "#f0f3f4", rock: "#b2b2b2", grass: "#459e4f", sand: "#e8cd5d", water: "#27a1f9"}, // Earth-like
+    {ice: "#efefef", rock: "#7590a7", grass: "#496880", sand: "#848a9b", water: "#9ac1eb"}, // Frozen
+    {ice: "#656565", rock: "#8d8c8b", grass: "#995353", sand: "#5f5253", water: "#ff9969"}, // Crimson
+    {ice: "#d7e382", rock: "#6d6c6c", grass: "#769a6f", sand: "#62725c", water: "#ddfc58"}, // Toxic
+    {ice: "#6b5752", rock: "#8e7161", grass: "#cdba8e", sand: "#a28a78", water: "#2ce8ff"}, // Drought
+    {ice: "#f9fdff", rock: "#6d7c81", grass: "#39644d", sand: "#9beaaf", water: "#4b7beb"}, // Mountains
+    {ice: "#a4c7ef", rock: "#5247b0", grass: "#8b54b3", sand: "#b0a0e0", water: "#0eaede"}, // Crystals
+    {ice: "#b7d3bd", rock: "#a8a6a5", grass: "#5f6665", sand: "#828487", water: "#758c65"}, // Decay
+    {ice: "#e5bb76", rock: "#a75c41", grass: "#aa8a78", sand: "#e1cb9e", water: "#32908f"}, // Mesa
+    {ice: "#8b7ba8", rock: "#635975", grass: "#5c4c7a", sand: "#977baf", water: "#6840d6"}, // Mercury
+    {ice: "#c96b18", rock: "#5f5043", grass: "#8c5e35", sand: "#a07f62", water: "#4597ad"}, // Venus
+    {ice: "#e2e9e0", rock: "#663b7f", grass: "#913470", sand: "#bb91a1", water: "#863dc8"}, // Pinkie
+    {ice: "#752f2f", rock: "#553535", grass: "#752f2f", sand: "#9c5543", water: "#538ead"}, // Mars
+]
 
 export const PLANET_NAME_ADJECTIVES = [
     'Ethereal', 'Celestial', 'Mystic', 'Luminous', 'Radiant', 'Astral', 'Cosmic', 'Vibrant',

@@ -5,7 +5,7 @@ import Entity from "../../models/entity";
 import Renderable from "../../models/renderable";
 import Satellite from "../../models/satellite";
 import SatelliteControl from "./satelliteControl";
-import CelestialControl from "./old_celestialControl";
+import CelestialControl from "./celestialControl";
 import { createRandomGas, createRandomStar, createRandomTerrestial } from "../../utils/generator";
 
 interface Props{
@@ -20,7 +20,7 @@ interface AddCelestialForm{
     sequence: Array<number>
 }
 
-export default function CelestialControls({celestials, setCelestials, selectedEntity, setSelectedEntity} : Props){
+export default function Controls({celestials, setCelestials, selectedEntity, setSelectedEntity} : Props){
     const [currentSequence, setCurrentSequence] = React.useState<Array<number>>([]);
     const [forceSequence, setForceSequence] = React.useState<Array<number>>([]);
     const [addModal, setAddModal] = React.useState<AddCelestialForm>({visible: false, sequence: []});
@@ -28,15 +28,6 @@ export default function CelestialControls({celestials, setCelestials, selectedEn
     React.useEffect(()=>{
         if(!selectedEntity) selectEntity([0])
     }, [selectedEntity])
-
-    // React.useEffect(()=>{
-    //     if(forceSequence.length){ 
-    //         selectEntity(forceSequence);
-    //         setForceSequence([]);
-    //     }
-        
-    // }, [celestials]);
-
 
     const findEntityBySequence = (indexSequence : Array<number>) => {
         const _entities = [...celestials];

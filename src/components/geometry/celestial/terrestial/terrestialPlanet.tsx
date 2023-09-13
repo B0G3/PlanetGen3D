@@ -28,15 +28,14 @@ export default function Planet({planet} : Props){
     const RADIUS_MULTIPLIER = (1 - (MAX_PLANET_RADIUS - planet.radius)/MAX_PLANET_RADIUS);
     const STEPNESS_MULTIPLIER = (1 - (MAX_PLANET_STEEPNESS - planet.steepness)/MAX_PLANET_STEEPNESS);
     const MOUNTAINOUSNESS_MULTIPLIER = (1 - (MAX_PLANET_MOUNTAINOUSNESS - planet.mountainousness)/MAX_PLANET_MOUNTAINOUSNESS)*(planet.radius/MAX_PLANET_RADIUS);
-    const NOISE_FREQUENCY = STEPNESS_MULTIPLIER * RADIUS_MULTIPLIER + 0.5;
-
-    const [basePositions, setBasePositions] = React.useState<Array<THREE.Vector3>>([]);
+    const NOISE_FREQUENCY = STEPNESS_MULTIPLIER * 1.25 * RADIUS_MULTIPLIER + 0.5;
     const SEED = React.useMemo(() => Math.random()*1000, []);
 
     const color = new THREE.Color();
-    const matrix = new THREE.Matrix4();
-    const quaternion = new THREE.Quaternion();
     const v3 = new THREE.Vector3();
+    const vertA = new THREE.Vector3();
+    const vertB = new THREE.Vector3();
+    const vertC = new THREE.Vector3();
 
     const getNoiseValue = (vector : THREE.Vector3) => {
         let noise = 0;
@@ -45,7 +44,6 @@ export default function Planet({planet} : Props){
         noise += 0.25 * noise4D(vector.x * NOISE_FREQUENCY * 4, vector.y * NOISE_FREQUENCY * 4, vector.z * NOISE_FREQUENCY * 4, SEED);
         noise *= (MOUNTAINOUSNESS_MULTIPLIER ) * 8;
         
-        // if(noise < 0.05) noise -= 0.25;
         return Math.round(noise * 4) / 4;
     }
 
@@ -54,9 +52,7 @@ export default function Planet({planet} : Props){
         const positions = geometry.attributes.position;
         geometry.setAttribute( 'color', new THREE.BufferAttribute( new Float32Array( positions.count * 3 ), 3 ) );
         const colors = geometry.attributes.color;
-        const vertA = new THREE.Vector3();
-        const vertB = new THREE.Vector3();
-        const vertC = new THREE.Vector3();
+
         const basePosition = new THREE.Vector3(); 
         let noise = 0;
         let k = 0;
@@ -65,7 +61,7 @@ export default function Planet({planet} : Props){
             basePosition.fromBufferAttribute(positions, i).normalize();
             noise = getNoiseValue(basePosition);
 
-            v3.copy(basePosition).multiplyScalar(planet.radius).addScaledVector(basePosition, noise + 0.005);
+            v3.copy(basePosition).multiplyScalar(planet.radius).addScaledVector(basePosition, noise + 0.01);
             v3.clampLength(-planet.radius/2, MAX_HEIGHT)
             positions.setXYZ(i, v3.x, v3.y, v3.z);
 
@@ -94,15 +90,12 @@ export default function Planet({planet} : Props){
 
                 // darken(Math.min((planet.waterLevel - shortest)*2/planet.radius,0.6)
                 if(shortest < planet.waterLevel + 0.125 ){ 
-                    let dist = (planet.waterLevel - shortest)/planet.radius;
-                    dist = Math.min(Math.round(dist * 5 ) / 5, 0.6);
-
-                    color.set(colorVariation(colord(planet.colors.sand), 0.2).darken(dist).toHex());
-                
+                    if(shortest < planet.waterLevel - 0.75) color.set(planet.colors.getVariant('deep_sand'));
+                    else color.set(planet.colors.getVariant('sand'));
                 }
-                else if(shortest < planet.waterLevel + 0.9 ) color.set(colorVariation(colord(planet.colors.grass), 0.05).toHex());
-                else if(shortest < planet.waterLevel + 1.75 ) color.set(colorVariation(colord(planet.colors.rock), 0.05).toHex())
-                else color.set(colorVariation(colord(planet.colors.ice), 0.15).toHex())
+                else if(shortest < planet.waterLevel + 0.9 ) color.set(planet.colors.getVariant('grass'));
+                else if(shortest < planet.waterLevel + 1.75 ) color.set(planet.colors.getVariant('rock'));
+                else color.set(planet.colors.getVariant('ice'));
 
 
                 colors.setXYZ(k * 3, color.r, color.g, color.b);
@@ -119,6 +112,37 @@ export default function Planet({planet} : Props){
         return geometry;
 
     },[DETAIL, planet.waterLevel, planet.steepness, planet.mountainousness])
+
+
+    React.useEffect(()=>{ // Update colors only
+        const geometry = planetGeometry;
+        const positions = geometry.attributes.position;
+        const colors = geometry.attributes.color;
+        for (let i = 0; i < positions.count/3; i++ ) {
+
+            v3.fromBufferAttribute(positions, i).normalize();
+            vertA.fromBufferAttribute(positions, i * 3 + 0);
+            vertB.fromBufferAttribute(positions, i * 3 + 1);
+            vertC.fromBufferAttribute(positions, i * 3 + 2);
+            const vertA_length = vertA.length();
+            const vertB_length = vertB.length();
+            const vertC_length = vertC.length();
+            const shortest = Math.min(vertA_length, vertB_length, vertC_length);
+            if(shortest < planet.waterLevel + 0.125 ){ 
+                if(shortest < planet.waterLevel - 0.75) color.set(planet.colors.getVariant('deep_sand'));
+                else color.set(planet.colors.getVariant('sand'));
+            }
+            else if(shortest < planet.waterLevel + 0.9 ) color.set(planet.colors.getVariant('grass'));
+            else if(shortest < planet.waterLevel + 1.75 ) color.set(planet.colors.getVariant('rock'));
+            else color.set(planet.colors.getVariant('ice'));
+
+
+            colors.setXYZ(i * 3, color.r, color.g, color.b);
+            colors.setXYZ(i * 3 + 1, color.r, color.g, color.b);
+            colors.setXYZ(i * 3 + 2, color.r, color.g, color.b);
+        }
+        colors.needsUpdate = true;
+    }, [planet.colors.needsUpdate])
 
     return (
         <>

@@ -31,7 +31,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
                     material: MATERIAL_DARKEN,
                     height_offset: 0.5,
                     color: {
-                        hex: planet.colors?.grass ?? "#ffffff",
+                        hex: planet.colors.grass,
                         variation: 0.1
                     },
                     size_variation: 0.6,
@@ -43,7 +43,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
                     material: MATERIAL_DARKEN,
                     height_offset: 0,
                     color: {
-                        hex: planet.colors?.grass ?? "#ffffff",
+                        hex: planet.colors.grass,
                         variation: 0.1
                     },
                     size_variation: 0,
@@ -62,7 +62,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
                     material: MATERIAL_DARKEN,
                     height_offset: 0.5,
                     color: {
-                        hex: planet.colors?.grass ?? "#ffffff",
+                        hex: planet.colors.grass,
                         variation: 0.1
                     },
                     size_variation: 1,
@@ -74,7 +74,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
                     material: MATERIAL_DARKEN,
                     height_offset: 0,
                     color: {
-                        hex: planet.colors?.grass ?? "#ffffff",
+                        hex: planet.colors.grass,
                         variation: 0.1
                     },
                     size_variation: 0.2,
@@ -93,7 +93,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
                     material: MATERIAL_DARKEN,
                     height_offset: -0.02,
                     color: {
-                        hex: planet.colors?.rock ?? "#ffffff",
+                        hex: planet.colors.rock ?? "#ffffff",
                         variation: 0.1
                     },
                     size_variation: 1,

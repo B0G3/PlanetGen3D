@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 // import './App.css';
 import './App.scss';
-import {solarSystem} from './utils/generator';
+import {createRandomTerrestial, generateUniverse} from './utils/generator';
 import Star from './models/star';
 import Celestial from './models/celestial';
 import { Canvas } from '@react-three/fiber';
@@ -10,34 +10,29 @@ import Universe from './components/geometry/universe';
 import { Vector3 } from 'three';
 import {Stats} from '@react-three/drei'
 import Controls from './components/ui/controls';
+import Satellite from './models/satellite';
 
 const CELESTIALS: Array<Celestial> = [];
-// const earth2 = earth();
-// earth2.setPosition(new Vector3(10,10,10));
-// CELESTIALS.push(earth());
-// CELESTIALS.push(earth2);
-
-CELESTIALS.push(solarSystem());
-
+CELESTIALS.push(generateUniverse(3));
+// CELESTIALS.push(createRandomTerrestial(5));
 const App = () => {
   const [celestials, setCelestials] = React.useState(CELESTIALS);
-  const [entity, setEntity] = React.useState(null);
+  const [selectedEntity, setSelectedEntity] = React.useState<Celestial | Satellite | null>(null);
 
   return (
     <div className="canvas-background" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', position: 'relative'}}>
       <Canvas>
           <Stats></Stats>
           <Universe
-            selectedEntity={entity}
-            // setSelectedEntity={setEntity}
+            selectedEntity={selectedEntity}
+            setSelectedEntity={setSelectedEntity}
             celestials={celestials}
-            // setCelestials={setCelestials}
           ></Universe>
       </Canvas>
       <Controls
-        selectedEntity={entity}
+        selectedEntity={selectedEntity}
         celestials={celestials}
-        setSelectedEntity={setEntity}
+        setSelectedEntity={setSelectedEntity}
         setCelestials={setCelestials}
       ></Controls>
   </div>

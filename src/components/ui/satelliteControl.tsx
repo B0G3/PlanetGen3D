@@ -12,8 +12,6 @@ function radiansToDegrees(radians: number): number {
     return radians * (180 / Math.PI);
 }
   
-  
-  
 function degreesToRadians(degrees: number): number {
     return degrees * (Math.PI / 180);
 }
@@ -47,7 +45,7 @@ export default function SatelliteControl({data, update} : Props){
                 <label>Distance</label>
                 <Slider
                     min={0}
-                    max={256}
+                    max={1024}
                     value={editedObject.distance}
                     onChange={(e)=>handleInputChange('distance', e)}
 

@@ -47,75 +47,7 @@ export default function Planet({planet} : Props){
         return Math.round(noise * 4) / 4;
     }
 
-    const planetGeometry = React.useMemo(()=>{
-        const geometry = new THREE.IcosahedronGeometry(planet.radius, DETAIL);
-        const positions = geometry.attributes.position;
-        geometry.setAttribute( 'color', new THREE.BufferAttribute( new Float32Array( positions.count * 3 ), 3 ) );
-        const colors = geometry.attributes.color;
-
-        const basePosition = new THREE.Vector3(); 
-        let noise = 0;
-        let k = 0;
-        for (let i = 0; i < positions.count; i++ ) {
-
-            basePosition.fromBufferAttribute(positions, i).normalize();
-            noise = getNoiseValue(basePosition);
-
-            v3.copy(basePosition).multiplyScalar(planet.radius).addScaledVector(basePosition, noise + 0.01);
-            v3.clampLength(-planet.radius/2, MAX_HEIGHT)
-            positions.setXYZ(i, v3.x, v3.y, v3.z);
-
-            if(i%3 === 2){
-                vertA.fromBufferAttribute(positions, k * 3 + 0);
-                vertB.fromBufferAttribute(positions, k * 3 + 1);
-                vertC.fromBufferAttribute(positions, k * 3 + 2);
-                const vertA_length = vertA.length();
-                const vertB_length = vertB.length();
-                const vertC_length = vertC.length();
-                const shortest = Math.min(vertA_length, vertB_length, vertC_length);
-
-
-                // if(vertA_length < planet.waterLevel + 0.1 ){
-                //     vertA.setLength(Math.max(vertA_length - 0.1, planet.radius/2));
-                //     positions.setXYZ(k * 3, vertA.x, vertA.y, vertA.z);
-                // }
-                // if(vertB_length < planet.waterLevel + 0.1 ){
-                //     vertB.setLength(Math.max(vertB_length - 0.1, planet.radius/2));
-                //     positions.setXYZ(k * 3 + 1, vertB.x, vertB.y, vertB.z);
-                // }
-                // if(vertC_length < planet.waterLevel + 0.1 ){
-                //     vertC.setLength(Math.max(vertC_length - 0.1, planet.radius/2));
-                //     positions.setXYZ(k * 3 + 2, vertC.x, vertC.y, vertC.z);
-                // }
-
-                // darken(Math.min((planet.waterLevel - shortest)*2/planet.radius,0.6)
-                if(shortest < planet.waterLevel + 0.125 ){ 
-                    if(shortest < planet.waterLevel - 0.75) color.set(planet.colors.getVariant('deep_sand'));
-                    else color.set(planet.colors.getVariant('sand'));
-                }
-                else if(shortest < planet.waterLevel + 0.9 ) color.set(planet.colors.getVariant('grass'));
-                else if(shortest < planet.waterLevel + 1.75 ) color.set(planet.colors.getVariant('rock'));
-                else color.set(planet.colors.getVariant('ice'));
-
-
-                colors.setXYZ(k * 3, color.r, color.g, color.b);
-                colors.setXYZ(k * 3 + 1, color.r, color.g, color.b);
-                colors.setXYZ(k * 3 + 2, color.r, color.g, color.b);
-
-                k++;
-            }
-
-        }
-        colors.needsUpdate = true;
-        geometry.attributes.position.needsUpdate = true;
-
-        return geometry;
-
-    },[DETAIL, planet.waterLevel, planet.steepness, planet.mountainousness])
-
-
-    React.useEffect(()=>{ // Update colors only
-        const geometry = planetGeometry;
+    const updateColors = (geometry: THREE.BufferGeometry) => {
         const positions = geometry.attributes.position;
         const colors = geometry.attributes.color;
         for (let i = 0; i < positions.count/3; i++ ) {
@@ -129,7 +61,7 @@ export default function Planet({planet} : Props){
             const vertC_length = vertC.length();
             const shortest = Math.min(vertA_length, vertB_length, vertC_length);
             if(shortest < planet.waterLevel + 0.125 ){ 
-                if(shortest < planet.waterLevel - 0.75) color.set(planet.colors.getVariant('deep_sand'));
+                if(shortest < planet.waterLevel - 1) color.set(planet.colors.getVariant('deep_sand'));
                 else color.set(planet.colors.getVariant('sand'));
             }
             else if(shortest < planet.waterLevel + 0.9 ) color.set(planet.colors.getVariant('grass'));
@@ -142,11 +74,43 @@ export default function Planet({planet} : Props){
             colors.setXYZ(i * 3 + 2, color.r, color.g, color.b);
         }
         colors.needsUpdate = true;
+    }
+
+    const planetGeometry = React.useMemo(()=>{
+        const geometry = new THREE.IcosahedronGeometry(planet.radius, DETAIL);
+        const positions = geometry.attributes.position;
+        geometry.setAttribute( 'color', new THREE.BufferAttribute( new Float32Array( positions.count * 3 ), 3 ) );
+        
+        const basePosition = new THREE.Vector3(); 
+        let noise = 0;
+        let k = 0;
+        for (let i = 0; i < positions.count; i++ ) {
+
+            basePosition.fromBufferAttribute(positions, i).normalize();
+            noise = getNoiseValue(basePosition);
+
+            v3.copy(basePosition).multiplyScalar(planet.radius).addScaledVector(basePosition, noise + 0.01);
+            v3.clampLength(-planet.radius/2, MAX_HEIGHT)
+            positions.setXYZ(i, v3.x, v3.y, v3.z);
+
+        }
+        geometry.attributes.position.needsUpdate = true;
+
+        updateColors(geometry);
+
+        return geometry;
+
+    },[DETAIL, planet.waterLevel, planet.steepness, planet.mountainousness])
+
+
+    React.useEffect(()=>{ // Update colors only
+        const geometry = planetGeometry;
+        updateColors(geometry);
     }, [planet.colors.needsUpdate])
 
     return (
-        <>
-                <mesh>
+        <group>
+                <mesh frustumCulled={false}>
                     <primitive object={planetGeometry} attach="geometry"></primitive>
                     <meshBasicMaterial
                         attach="material" 
@@ -157,7 +121,7 @@ export default function Planet({planet} : Props){
                     <PlanetWater planet={planet} noiseValue={getNoiseValue}></PlanetWater>
                 }
                 <PlanetDetails planet={planet} noiseValue={getNoiseValue}></PlanetDetails>
-        </>
+        </group>
        
     )
 }

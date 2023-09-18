@@ -3,7 +3,7 @@ import React from "react";
 import * as THREE from 'three';
 
 const starMaterial = new THREE.MeshBasicMaterial({ color: "white", transparent: true, opacity: 0.25 });
-const starGeometry = new THREE.IcosahedronGeometry(40, 1);
+const starGeometry = new THREE.IcosahedronGeometry(200, 1);
 
 export default function Background(){
     const groupRef = React.useRef<THREE.Group>(null)
@@ -22,7 +22,7 @@ export default function Background(){
             const x = Math.cos(theta) * r + (Math.random() - 0.5) * 1;
             const z = Math.sin(theta) * r + (Math.random() - 0.5) * 1;
                 
-            points.push(new THREE.Vector3(x, y, z).normalize().multiplyScalar(10000 + Math.random()*10000));
+            points.push(new THREE.Vector3(x, y, z).normalize().multiplyScalar(100000 + Math.random()*10000));
         }
         return points;
     }, []);
@@ -33,18 +33,6 @@ export default function Background(){
             if(meshRef && meshRef.current) meshRef.current.setMatrixAt(k, matrix);
         })
     }, [meshRef])
-   
-    // React.useEffect(()=>{
-    //     // LERP TO CAMERA
-    //     if(groupRef.current && position){ 
-    //         const [prevX, prevY, prevZ] = [groupRef.current.position.x, groupRef.current.position.y, groupRef.current.position.z];
-    //         const toX = prevX + (position.x - prevX) * 0.5;
-    //         const toY = prevY + (position.y - prevY) * 0.5;
-    //         const toZ = prevZ + (position.z - prevZ) * 0.5;
-    //         groupRef.current.position.set(toX, toY, toZ);
-        
-    //     }
-    // }, [position])
 
     useFrame(()=>{
         if(groupRef.current){
@@ -54,7 +42,6 @@ export default function Background(){
     })
 
     return (
-        // TODO: MAKE THE POSITION LERP... 
         <group ref={groupRef}> 
             <instancedMesh ref={meshRef} args={[starGeometry, starMaterial, points.length]}></instancedMesh>
         </group>

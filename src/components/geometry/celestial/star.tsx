@@ -9,6 +9,19 @@ import { getIcosahedronDetail } from "../../../utils/helpers";
 const noise4D = createNoise4D();
 
 export default function({star} : {star: Star}){
+    const COLOR_COUNT = 12;
+    const part = (1 / (COLOR_COUNT/2)) / 2;
+    const TINTS = React.useMemo(()=>{
+        const tints = [];
+        for(let i = Math.floor(COLOR_COUNT/2); i > 0; i--){
+            tints.push(colord(star.color).darken(i*part).toHex())
+        }
+
+        for(let i = Math.floor(COLOR_COUNT/2); i < COLOR_COUNT; i++){
+            tints.push(colord(star.color).darken(-(i - (COLOR_COUNT/2))*part).toHex())
+        }
+        return tints;
+    }, [star.color, star.fluctuations]);
     const DETAIL = getIcosahedronDetail(star.radius, 1/16);
     const RADIUS_MULTIPLIER = (1 - (MAX_STAR_RADIUS - star.radius)/MAX_STAR_RADIUS);
     const [count, setCount] = React.useState(0);
@@ -42,11 +55,14 @@ export default function({star} : {star: Star}){
         for ( let i = 0; i < positions.count; i ++ ) {
             if(!startPositions[i]) return;
             const noise = noise4D(startPositions[i].x, startPositions[i].y, startPositions[i].z, count) * (star.fluctuations + 0.25);
-            const part = Math.round(noise * 4) / 4;
+            const part = Math.round(noise * (COLOR_COUNT/2)) / (COLOR_COUNT/2);
 
             if(i%3===2){
-                const hex = colord(star.color).darken(part/4).toHex();
-                color.set(hex);
+                const fluctuations = Math.max(star.fluctuations, 0.5)
+                const normalizedValue = (noise / (fluctuations + 0.25) + 1 ) / 2;
+
+                const mappedValue = Math.floor(normalizedValue * COLOR_COUNT);
+                color.set(TINTS[mappedValue]);
 
                 colors.setXYZ(k * 3 + 0, color.r, color.g, color.b);
                 colors.setXYZ(k * 3 + 1, color.r, color.g, color.b);
@@ -55,7 +71,6 @@ export default function({star} : {star: Star}){
             }
             
             v3.copy(startPositions[i]).multiplyScalar(star.radius).addScaledVector(startPositions[i], part * RADIUS_MULTIPLIER * 4);
-            // v3.setLength(Math.round(v3.length()*4)/4);
             positions.setXYZ(i, v3.x, v3.y, v3.z)
         }
 

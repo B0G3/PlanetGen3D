@@ -1,14 +1,15 @@
 
 import Renderable from "./renderable";
 import SatelliteInterface from "../interfaces/satellite";
+import Celestial from "./celestial";
 export default class Satellite implements SatelliteInterface{
-    parent: Renderable;
-    entity: Renderable;
+    parent: Celestial;
+    entity: Celestial;
     distance: number;
     speed: number;
     tiltX: number;
     tiltY: number;
-    constructor(parent: Renderable, entity: Renderable, distance: number, speed: number, tiltX: number = 0, tiltY: number = 0){
+    constructor(parent: Celestial, entity: Celestial, distance: number, speed: number, tiltX: number = 0, tiltY: number = 0){
         this.parent = parent;
         this.entity = entity;
         this.distance = distance;
@@ -19,6 +20,10 @@ export default class Satellite implements SatelliteInterface{
 
     getGeometry(){
         return this.entity.geometry;
+    }
+
+    getSequence(){
+        return this.entity.sequence;
     }
 
     getId(){

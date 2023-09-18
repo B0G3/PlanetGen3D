@@ -3,13 +3,15 @@ import { useFrame } from "@react-three/fiber";
 import SatelliteModel from "../../models/satellite";
 import * as THREE from 'three';
 import Renderable from "./renderable";
-import Celestial from "../../models/celestial"
+// import Celestial from "../../models/celestial"
 import { Line, PointMaterial } from "@react-three/drei";
 import TerrestialPlanet from "../../models/terrestialPlanet";
+import Celestial from "./celestial/celestial";
 
 interface Props{
     satellite: SatelliteModel,
-    selected?: boolean
+    selected?: boolean,
+    setSelectedEntity: Function
 }
 
 function HollowCircle({radius, segments} : {radius: number, segments: number}) {
@@ -27,12 +29,12 @@ function HollowCircle({radius, segments} : {radius: number, segments: number}) {
     );
 }
 
-export default function Satellite({satellite} : Props){
+export default function Satellite({satellite, setSelectedEntity} : Props){
     const childRef = useRef<THREE.Group>(null);
     const entityRef = useRef<THREE.Group>(null);
     const [startZ, setStartZ] = useState(Math.random() * Math.PI);
-    const parent_radius = ((satellite.parent instanceof Celestial) ? ((satellite.parent instanceof TerrestialPlanet)?(Math.max(satellite.parent.radius, satellite.parent.waterLevel)):satellite.parent.radius + satellite.distance) : satellite.distance);
-    const child_radius = ((satellite.entity instanceof Celestial) ? ((satellite.entity instanceof TerrestialPlanet)?(Math.max(satellite.entity.radius, satellite.entity.waterLevel)):satellite.entity.radius + satellite.distance) : satellite.distance);
+    const parent_radius = ((satellite.parent) ? ((satellite.parent instanceof TerrestialPlanet)?(Math.max(satellite.parent.radius, satellite.parent.waterLevel)):satellite.parent.radius + satellite.distance) : satellite.distance);
+    const child_radius = ((satellite.entity) ? ((satellite.entity instanceof TerrestialPlanet)?(Math.max(satellite.entity.radius, satellite.entity.waterLevel)):satellite.entity.radius + satellite.distance) : satellite.distance);
     const distance = parent_radius + child_radius + satellite.distance;
 
     useEffect(() => {
@@ -48,9 +50,12 @@ export default function Satellite({satellite} : Props){
     })
 
     return (<>
-            <group rotation={[satellite.tiltX, satellite.tiltY, 0]} ref={childRef}>
-                <group position={[0,distance,0]} ref={entityRef}>
-                    <Renderable renderable={satellite.entity}></Renderable>
+            <group rotation={[satellite.tiltX, satellite.tiltY, childRef.current?.rotation.z ?? 0]} ref={childRef}>
+                <group 
+                onClick={(event)=>(setSelectedEntity(satellite), event.stopPropagation())} 
+                position={[0,distance,0]} ref={entityRef}>
+                    {/* <Renderable renderable={satellite.entity} setSelectedEntity={setSelectedEntity}></Renderable> */}
+                    <Celestial celestial={satellite.entity} setSelectedEntity={setSelectedEntity}></Celestial>
                 </group>
 
                 <HollowCircle radius={distance} segments={32}></HollowCircle>

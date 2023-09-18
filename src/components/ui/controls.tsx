@@ -11,7 +11,7 @@ import { createRandomGas, createRandomStar, createRandomTerrestial } from "../..
 interface Props{
     celestials: Array<Celestial>,
     setCelestials: Function,
-    selectedEntity: Entity | null,
+    selectedEntity: Celestial | Satellite | null,
     setSelectedEntity: Function
 }
 
@@ -21,25 +21,23 @@ interface AddCelestialForm{
 }
 
 export default function Controls({celestials, setCelestials, selectedEntity, setSelectedEntity} : Props){
-    const [currentSequence, setCurrentSequence] = React.useState<Array<number>>([]);
-    const [forceSequence, setForceSequence] = React.useState<Array<number>>([]);
     const [addModal, setAddModal] = React.useState<AddCelestialForm>({visible: false, sequence: []});
 
     React.useEffect(()=>{
-        if(!selectedEntity) selectEntity([0])
+        if(!selectedEntity) selectEntity([0]);
     }, [selectedEntity])
 
     const findEntityBySequence = (indexSequence : Array<number>) => {
         const _entities = [...celestials];
-        let currentItem : Celestial | Satellite = _entities[indexSequence[0]];
+        let currentItem : Celestial | Satellite = _entities.find(e => e.id === indexSequence[0]) as Celestial;
           
         for (let i = 1; i <= indexSequence.length - 1; i++) {
-            if(currentItem instanceof Celestial ){ 
-                let entity : Satellite = currentItem.satellites[indexSequence[i]];
+            if(currentItem instanceof Celestial){ 
+                let entity = currentItem.satellites.find(e => e.entity.id === indexSequence[i]) as Satellite;
                 currentItem = entity;
             }else if(currentItem instanceof Satellite){
-                let entity : Renderable = currentItem.entity;
-                if(entity instanceof Celestial) currentItem = entity.satellites[indexSequence[i]];
+                let entity = currentItem.entity.satellites.find(e => e.entity.id === indexSequence[i]) as Satellite;
+                currentItem = entity;
             }
         }
         return currentItem;
@@ -47,9 +45,7 @@ export default function Controls({celestials, setCelestials, selectedEntity, set
 
     const selectEntity = (indexSequence : Array<number>) => {
         let entity = findEntityBySequence(indexSequence);
-        console.log(entity, celestials);
-        if(entity){ 
-            setCurrentSequence(indexSequence)
+        if(entity){
             setSelectedEntity(entity);
         }
     }
@@ -59,51 +55,46 @@ export default function Controls({celestials, setCelestials, selectedEntity, set
         const _entities = [...celestials];
 
         if (indexSequence.length === 1) {
-          _entities.splice(indexSequence[0], 1);
+            let index = _entities.findIndex(e => e.id === indexSequence[0]);
+            _entities.splice(index, 1);
         }else{
-            let currentItem : Celestial | Satellite = _entities[indexSequence[0]];
-      
-            for (let i = 1; i < indexSequence.length - 1; i++) {
-                if(currentItem instanceof Celestial ){ 
-                    let entity : Satellite = currentItem.satellites[indexSequence[i]];
+            const _entities = [...celestials];
+            let currentItem : Celestial | Satellite = _entities.find(e => e.id === indexSequence[0]) as Celestial;
+            
+            for (let i = 1; i <= indexSequence.length - 2; i++) {
+                if(currentItem instanceof Celestial){ 
+                    let entity = currentItem.satellites.find(e => e.entity.id === indexSequence[i]) as Satellite;
                     currentItem = entity;
                 }else if(currentItem instanceof Satellite){
-                    let entity : Renderable = currentItem.entity;
-                    if(entity instanceof Celestial) currentItem = entity.satellites[indexSequence[i]];
+                    let entity = currentItem.entity.satellites.find(e => e.entity.id === indexSequence[i]) as Satellite;
+                    currentItem = entity;
                 }
             }
-
-            if(currentItem instanceof Celestial) currentItem.satellites.splice(indexSequence[indexSequence.length - 1], 1);
+            
+            if(currentItem instanceof Celestial){ 
+                let index = currentItem.satellites.findIndex(e => e.entity.id === indexSequence[indexSequence.length - 1]);
+                currentItem.satellites.splice(index, 1)
+            };
             if(currentItem instanceof Satellite) {
-                let entity = currentItem.entity as Celestial
-                entity.satellites.splice(indexSequence[indexSequence.length - 1], 1);
+                let index = currentItem.entity.satellites.findIndex(e => e.entity.id === indexSequence[indexSequence.length - 1]);
+                currentItem.entity.satellites.splice(index, 1)
             }
         }
         
         setCelestials(_entities);
-        if(indexSequence.length <= currentSequence.length){
-            let _currentSequence = [...currentSequence];
-            for(let i = 0; i < indexSequence.length; i++){
-                if(indexSequence[i] < currentSequence[i]) _currentSequence[i] -= 1;
-                if(indexSequence[i] > currentSequence[i]) break;
-            }
-            setCurrentSequence(_currentSequence);
-            let entity = findEntityBySequence(_currentSequence);
-            if(!entity) setSelectedEntity(null);
-        }
     }
 
     const updateEntity = (indexSequence : Array<number>, data: Object, nested = true) =>{
         const _entities = [...celestials];
-        let currentItem : Celestial | Satellite = _entities[indexSequence[0]];
+        let currentItem : Celestial | Satellite = _entities.find(e => e.id === indexSequence[0]) as Celestial;
           
         for (let i = 1; i <= indexSequence.length - 1; i++) {
-            if(currentItem instanceof Celestial ){ 
-                let entity : Satellite = currentItem.satellites[indexSequence[i]];
+            if(currentItem instanceof Celestial){ 
+                let entity = currentItem.satellites.find(e => e.entity.id === indexSequence[i]) as Satellite;
                 currentItem = entity;
             }else if(currentItem instanceof Satellite){
-                let entity : Renderable = currentItem.entity;
-                if(entity instanceof Celestial) currentItem = entity.satellites[indexSequence[i]];
+                let entity = currentItem.entity.satellites.find(e => e.entity.id === indexSequence[i]) as Satellite;
+                currentItem = entity;
             }
         }
         
@@ -117,22 +108,20 @@ export default function Controls({celestials, setCelestials, selectedEntity, set
 
     const addEntity = (entityType: 'terrestial'|'gas'|'star', indexSequence: Array<number>) => {
         const _entities = [...celestials];
-        let currentItem : Celestial | Satellite = _entities[indexSequence[0]];
+        let currentItem : Celestial | Satellite = _entities.find(e => e.id === indexSequence[0]) as Celestial;
           
         for (let i = 1; i <= indexSequence.length - 1; i++) {
-            if(currentItem instanceof Celestial ){ 
-                let entity : Satellite = currentItem.satellites[indexSequence[i]];
+            if(currentItem instanceof Celestial){ 
+                let entity = currentItem.satellites.find(e => e.entity.id === indexSequence[i]) as Satellite;
                 currentItem = entity;
             }else if(currentItem instanceof Satellite){
-                let entity : Renderable = currentItem.entity;
-                if(entity instanceof Celestial) currentItem = entity.satellites[indexSequence[i]];
+                let entity = currentItem.entity.satellites.find(e => e.entity.id === indexSequence[i]) as Satellite;
+                currentItem = entity;
             }
         }
-        if(currentItem instanceof Satellite){
-            let entity : Renderable = currentItem.entity;
-            if(entity instanceof Celestial) currentItem = entity;
-        }
+        if(currentItem instanceof Satellite) currentItem = currentItem.entity;
         currentItem = currentItem as Celestial;
+
         let entity = null;
         let satelliteRadius = Math.max(1, Math.floor(currentItem.radius/2), (Math.random()*currentItem.radius)-2);
         if(entityType === 'terrestial') entity = createRandomTerrestial(satelliteRadius);
@@ -146,11 +135,12 @@ export default function Controls({celestials, setCelestials, selectedEntity, set
             let tiltY = -Math.PI/2 + Math.random() * Math.PI;
             let satelliteCount = currentItem.satellites.length
             currentItem.addSatellite(entity, maxDist + radius + 8, speed, tiltX, tiltY);
+            console.log(currentItem);
             setCelestials(_entities);
 
-            const newSequence = indexSequence;
-            newSequence.push(satelliteCount);
-            selectEntity(newSequence);
+            // const newSequence = indexSequence;
+            // newSequence.push(satelliteCount);
+            selectEntity(entity.sequence);
         }
         closeAddModal();
     }
@@ -171,11 +161,11 @@ export default function Controls({celestials, setCelestials, selectedEntity, set
     }
 
     const updateSatellite = (data: Object) => {
-        updateEntity(currentSequence, data, false);
+        updateEntity(selectedEntity?.getSequence() ?? [], data, false);
     }
 
     const updateCelestial = (data: Object) => {
-        updateEntity(currentSequence, data, true);
+        updateEntity(selectedEntity?.getSequence() ?? [], data, true);
     }
 
     return (
@@ -223,10 +213,11 @@ export default function Controls({celestials, setCelestials, selectedEntity, set
             <div className="controls-wrapper">
                 <div className="control-box">
                     <div id="entity-list">
-                        {celestials.map((e, k) => <CelestialControlsItem key={e.id} entity={e} selectEntity={selectEntity} deleteEntity={deleteEntity} addEntity={showAddModal} sequence={[k]} currentSequence={currentSequence}></CelestialControlsItem>)}
+                        {celestials.map((e, k) => <CelestialControlsItem key={e.id} entity={e} selectEntity={selectEntity} deleteEntity={deleteEntity} addEntity={showAddModal} currentSequence={selectedEntity?.getSequence()??[]}></CelestialControlsItem>)}
                     </div>
                 </div>
-                {currentSequence.length && 
+                { 
+                (selectedEntity?.getSequence()?.length) &&
                 <div className="control-box">
                     {selectedEntity instanceof Celestial && <>
                         <CelestialControl data={selectedEntity} update={updateSatellite}></CelestialControl>

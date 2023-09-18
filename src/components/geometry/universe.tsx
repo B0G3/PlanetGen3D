@@ -11,40 +11,39 @@ import { MAX_PLANET_RADIUS } from "../../utils/constants";
 
 interface Props{
     celestials: Array<Celestial>,
-    selectedEntity: Renderable | Satellite | null,
+    selectedEntity: Celestial | Satellite | null,
+    setSelectedEntity: Function
 }
 
-export default function Universe({celestials, selectedEntity} : Props){
-    const { camera } = useThree();
+export default function Universe({celestials, selectedEntity, setSelectedEntity} : Props){
+    const { camera, scene } = useThree();
 	const cameraControlRef = React.useRef<CameraControls | null>(null);
     const [minDistance, setMinDistance] = React.useState(0);
     const v3 = new THREE.Vector3();
-    const [cameraPosition, setCameraPosition] = React.useState<THREE.Vector3>(v3);
 
     React.useEffect(() => {
-        camera.far = 100000;
+        scene.traverse(obj => obj.frustumCulled = false);
+        camera.far = 10000000;
         camera.updateProjectionMatrix();
     }, [])
 
-    // React.useEffect(()=>{
-    //     if(!selectedEntity) return;
-    //     if(selectedEntity instanceof Celestial){
-    //         setMinDistance(selectedEntity.radius * 1.5);
-    //         cameraControlRef.current?.dollyTo(selectedEntity.radius * 3, false);
-    //         // cameraControlRef.current?.dollyTo(selectedEntity.radius * 3, true);
-    //         // setMaxDistance(selectedEntity.radius * 4 + 4);
-    //     }
-    //     if(selectedEntity instanceof Satellite){
-    //         let entity = selectedEntity.entity;
-    //         if(entity instanceof Celestial){
-    //             setMinDistance(entity.radius * 1.5);
-    //             cameraControlRef.current?.dollyTo(entity.radius * 3, false);
-    //             // cameraControlRef.current?.dollyTo(entity.radius * 3, true);
+    React.useEffect(()=>{
+        if(!selectedEntity) return;
+        if(selectedEntity instanceof Celestial){
+            setMinDistance(selectedEntity.radius * 1.5);
+            cameraControlRef.current?.dollyTo(selectedEntity.radius * 3, true);
+            // setMaxDistance(selectedEntity.radius * 4 + 4);
+        }
+        if(selectedEntity instanceof Satellite){
+            let entity = selectedEntity.entity;
+            if(entity instanceof Celestial){
+                setMinDistance(entity.radius * 1.5);
+                cameraControlRef.current?.dollyTo(entity.radius * 3, true);
                 
-    //             // setMaxDistance(entity.radius * 4 + 4);
-    //         }
-    //     }
-    // }, [selectedEntity])
+                // setMaxDistance(entity.radius * 4 + 4);
+            }
+        }
+    }, [selectedEntity])
 
     const updateCamera = (transition = false) => {
         const matrixWolrd = selectedEntity?.getGeometry()?.matrixWorld;
@@ -53,8 +52,6 @@ export default function Universe({celestials, selectedEntity} : Props){
 
         if(cameraControlRef.current){
             cameraControlRef.current.moveTo(v3.x, v3.y, v3.z, transition);
-            cameraControlRef.current.getTarget(v3);
-            setCameraPosition(v3);
         }
     }
 
@@ -66,10 +63,10 @@ export default function Universe({celestials, selectedEntity} : Props){
     return (<>
         <group rotation={[-Math.PI/2, 0, 0]}>
             {celestials.map((e, k) => 
-                <CelestialGeometry key={e.id} celestial={e}></CelestialGeometry> 
+                <CelestialGeometry key={e.id} celestial={e} setSelectedEntity={setSelectedEntity}></CelestialGeometry> 
             )}
         </group>
-		<CameraControls makeDefault smoothTime={0.15} minDistance={minDistance} maxDistance={120} ref={cameraControlRef}/>
+		<CameraControls smoothTime={0.15} minDistance={minDistance} maxDistance={1000} ref={cameraControlRef}/>
         <Background></Background>
     </>);
 }

@@ -144,10 +144,6 @@ export default function PlanetDetails({planet, noiseValue}: Props){
             noise = noiseValue(e);
             v3.copy(e).multiplyScalar(planet.radius).addScaledVector(e, noise);
             let v3_length = v3.length();
-            // if(v3_length < planet.waterLevel + 0.1 ){
-            //     v3.setLength(Math.max(v3_length - 0.1, planet.radius/2));
-            //     v3_length = v3.length();
-            // }
             const point = v3.clone();
 
             // Generate random value from 1 to total density
@@ -156,7 +152,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
             let loop = true;
             DECAL_TYPES.forEach((d, k) => {
                 d.meshes.forEach(m => {
-                    color.set(colorVariation(colord(m.color.hex), m.color.variation).toHex());
+                    color.set(colorVariation(colord(m.color.hex)).toHex());
                     m.ref.current?.setColorAt(i, color);
                 })
                 density_cumulative += d.density;
@@ -188,6 +184,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
                 if(m.ref && m.ref.current) {
                     m.ref.current.count = decal_count[k];
                     m.ref.current.instanceMatrix.needsUpdate = true;
+                    if(m.ref.current.instanceColor) m.ref.current.instanceColor.needsUpdate = true;
                 }
             })
         })
@@ -195,7 +192,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
 
     React.useEffect(()=>{
         generateDecals();
-    }, [planet.enableVegetation, planet.detailCount, planet.waterLevel, planet.steepness, planet.mountainousness])
+    }, [planet.enableVegetation, planet.detailCount, planet.waterLevel, planet.steepness, planet.mountainousness, planet.colors.grass, planet.colors.rock])
 
 
     return (

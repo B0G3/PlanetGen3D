@@ -16,12 +16,10 @@ interface Props{
 }
 
 export default function Celestial({celestial, setSelectedEntity} : Props){
-    // const [hovered, setHovered] = React.useState(false)
     const [rotationXSpeed, setRotationXSpeed] = React.useState((Math.random() * 6 - 3) / 10000)
     const [rotationYSpeed, setRotationYSpeed] = React.useState((Math.random() * 6 - 3) / 10000)
     const [rotationZSpeed, setRotationZSpeed] = React.useState((Math.random() * 6 - 3) / 10000)
-    
-    // console.log(setHovered);
+
     const ref = React.useRef<any>();
     React.useEffect(()=>{
         celestial.setGeometry(ref.current);
@@ -39,7 +37,7 @@ export default function Celestial({celestial, setSelectedEntity} : Props){
 
     return <>
         <group 
-        // onClick={(event)=>(setSelectedEntity(celestial), event.stopPropagation())} 
+        onClick={(event)=>{ if (celestial.sequence.length === 1) return (setSelectedEntity(celestial), event.stopPropagation())}} 
         ref={ref} position={celestial.position}>
             {(celestial instanceof TerrestialPlanet || celestial instanceof GasPlanet) && 
                 <PlanetGeometry key={celestial.id} planet={celestial}></PlanetGeometry>

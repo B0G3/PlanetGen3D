@@ -23,32 +23,36 @@ function Cloud({distance, direction, hexColor} : {distance: number, direction: T
     const puffGeometry = React.useMemo(()=>{
         const geometry = new THREE.IcosahedronGeometry(1, 1);
         const positions = geometry.attributes.position;
+        const seed = Math.random()*1000;
+        for (let i = 0; i < positions.count; i++){
+            v3.fromBufferAttribute(positions, i);
+            const noise = noise4D(v3.x, v3.y, v3.z, seed)
+            v3.addScaledVector(v3, noise * 0.5);
+            positions.setXYZ(i, v3.x, v3.y, v3.z)
+        }
+        return geometry;
+    }, [])
+
+    const puffGeometryColored = React.useMemo(() => {
+        const geometry = puffGeometry
+        const positions = geometry.attributes.position;
         geometry.setAttribute( 'color', new THREE.BufferAttribute( new Float32Array( positions.count * 3 ), 3 ) );
         const colors = geometry.attributes.color;
         const color = new THREE.Color();
         const seed = Math.random()*1000;
         let k = 0;
-        for (let i = 0; i < positions.count; i++){
-            
-            v3.fromBufferAttribute(positions, i);
-
-            const noise = noise4D(v3.x, v3.y, v3.z, seed)
+        for (let i = 0; i < positions.count/3; i++){
+        
             const hex = colorVariation(colord(hexColor), 0.2).toHex();
             color.set(hex);
 
-            if(i%3===0){
-                colors.setXYZ(k * 3 + 0, color.r, color.g, color.b);
-                colors.setXYZ(k * 3 + 1, color.r, color.g, color.b);
-                colors.setXYZ(k * 3 + 2, color.r, color.g, color.b);
-                k++;
-            }
-            
-            v3.addScaledVector(v3, noise * 0.5);
-            positions.setXYZ(i, v3.x, v3.y, v3.z)
+            colors.setXYZ(i * 3 + 0, color.r, color.g, color.b);
+            colors.setXYZ(i * 3 + 1, color.r, color.g, color.b);
+            colors.setXYZ(i * 3 + 2, color.r, color.g, color.b);
         }
-
         return geometry;
-    }, [hexColor])
+    }, [puffGeometry, hexColor])
+    
 
     const matrix = new THREE.Matrix4();
     const quaternion = new THREE.Quaternion();
@@ -88,6 +92,7 @@ function Cloud({distance, direction, hexColor} : {distance: number, direction: T
 
         if(ref.current){ 
             ref.current.instanceMatrix.needsUpdate = true;
+            ref.current.count = puffCount;
             ref.current.computeBoundingSphere();
         }
     }, [ref, distance])
@@ -101,7 +106,7 @@ function Cloud({distance, direction, hexColor} : {distance: number, direction: T
 
     return (
         <group rotation={[tiltX, tiltY, 0]} ref={groupRef}>
-                <instancedMesh ref={ref} args={[puffGeometry, cloudMaterial, puffCount]}></instancedMesh>
+                <instancedMesh ref={ref} args={[puffGeometryColored, cloudMaterial, puffCount]}></instancedMesh>
         </group>
     )
 }

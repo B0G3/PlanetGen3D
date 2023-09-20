@@ -123,23 +123,19 @@ export default function Controls({celestials, setCelestials, selectedEntity, set
         currentItem = currentItem as Celestial;
 
         let entity = null;
-        let satelliteRadius = Math.max(1, Math.floor(currentItem.radius/2), (Math.random()*currentItem.radius)-2);
+        let satelliteRadius = Math.max(1, Math.floor(currentItem.radius/2), (Math.random()*currentItem.radius)-3);
         if(entityType === 'terrestial') entity = createRandomTerrestial(satelliteRadius);
         if(entityType === 'gas') entity = createRandomGas(satelliteRadius);
         if(entityType === 'star') entity = createRandomStar(satelliteRadius);
         if(entity){
-            let radius = entity.radius ;
+            let radius = entity.radius;
             let maxDist = Math.max(...currentItem.satellites.map(e => e.distance), 0);
             let speed = (20 + Math.random() * 180)/100;
             let tiltX = -Math.PI/2 + Math.random() * Math.PI;
             let tiltY = -Math.PI/2 + Math.random() * Math.PI;
-            let satelliteCount = currentItem.satellites.length
             currentItem.addSatellite(entity, maxDist + radius + 8, speed, tiltX, tiltY);
             console.log(currentItem);
             setCelestials(_entities);
-
-            // const newSequence = indexSequence;
-            // newSequence.push(satelliteCount);
             selectEntity(entity.sequence);
         }
         closeAddModal();

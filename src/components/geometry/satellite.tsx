@@ -32,7 +32,7 @@ function HollowCircle({radius, segments} : {radius: number, segments: number}) {
 export default function Satellite({satellite, setSelectedEntity} : Props){
     const childRef = useRef<THREE.Group>(null);
     const entityRef = useRef<THREE.Group>(null);
-    const [startZ, setStartZ] = useState(Math.random() * Math.PI);
+    const [startZ, setStartZ] = useState(Math.random() * Math.PI * 2);
     const parent_radius = ((satellite.parent) ? ((satellite.parent instanceof TerrestialPlanet)?(Math.max(satellite.parent.radius, satellite.parent.waterLevel)):satellite.parent.radius + satellite.distance) : satellite.distance);
     const child_radius = ((satellite.entity) ? ((satellite.entity instanceof TerrestialPlanet)?(Math.max(satellite.entity.radius, satellite.entity.waterLevel)):satellite.entity.radius + satellite.distance) : satellite.distance);
     const distance = parent_radius + child_radius + satellite.distance;

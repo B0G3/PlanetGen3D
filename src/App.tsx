@@ -20,7 +20,7 @@ const App = () => {
   const [selectedEntity, setSelectedEntity] = React.useState<Celestial | Satellite | null>(null);
 
   return (
-    <div className="canvas-background" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', position: 'relative'}}>
+    <div className="canvas-background" style={{justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw', position: 'relative'}}>
       <Canvas>
           <Stats></Stats>
           <Universe

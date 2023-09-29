@@ -7,12 +7,24 @@ interface Props{
     selectEntity: Function,
     deleteEntity: Function,
     addEntity: Function,
-    // sequence: Array<number>,
     currentSequence: Array<number>,
 }
 
 export default function CelestialControlsItem(props: Props){
     const [collapsed, setCollapsed] = React.useState(true);
+
+    // Make sure submenu opens when we click given celestial
+    React.useEffect(() => {
+        if(props.entity.sequence.length >= props.currentSequence.length) return;
+        let open = true;
+        props.entity.sequence.forEach((e, k) => {
+            if(props.entity.sequence[k] != props.currentSequence[k]){open = false; return;}
+        })
+        if(open) setCollapsed(false);
+
+
+    }, [props.currentSequence]);
+
     return (
         <div className={"item" + ((props.entity.sequence.toString() == props.currentSequence.toString())?' active':'')}>
             {props.entity instanceof Celestial && <>

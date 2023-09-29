@@ -19,7 +19,7 @@ export function createRandomStar(radius?: number){
 
 export function createRandomGas(radius?: number){
     if(!radius) radius = Math.random() * (MAX_STAR_RADIUS-MIN_STAR_RADIUS) + MIN_STAR_RADIUS
-    let star = new Star(new THREE.Vector3(0,0,0), radius);
+    let star = new GasPlanet(new THREE.Vector3(0,0,0), radius);
     return star;
 }
 
@@ -29,20 +29,21 @@ function generateTerrestial(radius: number){
     let max_moons = Math.floor(Math.sqrt(radius/2));
     let chance = 1/2;
     let distance = 5 + Math.random() * 4;
+    if(planet.ring.enabled) distance += planet.ring.startDistance + planet.ring.width;
     for(let i = 0; i < max_moons; i++){
         if(Math.random() < chance){
             let moonRadius = Math.min(Math.max(Math.ceil(planet.radius/3) * Math.random(), 1), MAX_PLANET_RADIUS)
             let moon = new TerrestialPlanet(new THREE.Vector3(0,0,0), moonRadius);
+            moon.ring.enabled = false;
             planet.addSatellite(moon, distance, Math.random()*1.8 + 0.2, Math.PI * Math.random() - Math.PI/2, Math.PI * Math.random() - Math.PI/2);
             distance += moonRadius +  + Math.random() * 4 + 4;
         }
-        // chance *= 1/2;
     }
 
     return {pivot: planet, radius: distance + planet.radius};
 }
 
-function generatePlanetarySystem(planetCount: number){
+export function generatePlanetarySystem(planetCount: number){
     let starRadius = Math.min(MAX_STAR_RADIUS, 25 + Math.random()*25)
     let star = createRandomStar(starRadius);
     let distance = Math.random() * 12 + 4;

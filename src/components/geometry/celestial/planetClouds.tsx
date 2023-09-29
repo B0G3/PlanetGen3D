@@ -43,7 +43,7 @@ function Cloud({distance, direction, hexColor} : {distance: number, direction: T
         let k = 0;
         for (let i = 0; i < positions.count/3; i++){
         
-            const hex = colorVariation(colord(hexColor), 0.2).toHex();
+            const hex = colorVariation(colord(hexColor), 0.1).toHex();
             color.set(hex);
 
             colors.setXYZ(i * 3 + 0, color.r, color.g, color.b);

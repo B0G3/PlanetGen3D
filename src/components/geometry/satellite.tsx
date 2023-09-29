@@ -58,7 +58,7 @@ export default function Satellite({satellite, setSelectedEntity} : Props){
                     <Celestial celestial={satellite.entity} setSelectedEntity={setSelectedEntity}></Celestial>
                 </group>
 
-                <HollowCircle radius={distance} segments={32}></HollowCircle>
+                {/* <HollowCircle radius={distance} segments={32}></HollowCircle> */}
             </group>
         </>);
 

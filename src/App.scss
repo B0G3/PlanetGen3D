@@ -20,9 +20,13 @@ button{
     border: none;
     border-radius: 0;
     background: #d8d8d8;
-    cursor: pointer;
-    &:hover{
+    &:hover:not([disabled]){
         outline: 2px solid #252525;
+        cursor: pointer;
+    }
+
+    &:disabled{
+        opacity: 0.4;
     }
 }
 
@@ -52,7 +56,7 @@ button{
                 &:hover{                
                     &::before{
                         content: url("data:image/svg+xml,%3Csvg viewBox='0 0 12.7 12.7' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform='translate(169.33 -118.75)'%3E%3Cpath d='m-166.16 119.28v11.641h1.0588v-1.0588h1.0583v-1.0584h1.0588v-1.0578h1.0578v-1e-3h5.3e-4v-1.0563h-5.3e-4v-1e-3h5.3e-4v1e-3h1.0588v-1.0588h-1e-3v-5.3e-4h1e-3v5.3e-4h1.0563v-1.0583c-0.35256 5.2e-4 -0.70428-5.3e-4 -1.0563-5.3e-4v-1.0583h-1.0588v-1.0583h-1.0584v-1.0589h-1.0588v-1.0583h-1.0583v-1.0568z' solid-color='rgb(0,0,0)' font-feature-settings='normal' font-variant-alternates='normal' font-variant-caps='normal' font-variant-ligatures='normal' font-variant-numeric='normal' font-variant-position='normal' isolation='auto' mix-blend-mode='normal' paint-order='normal' shape-padding='0' text-decoration-color='rgb(0,0,0)' text-decoration-line='none' text-decoration-style='solid' text-indent='0' text-orientation='mixed' text-transform='none' white-space='normal'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");                    position: absolute;
-                        fill: black;
+                        fill: #252525;
                         width: 12px;
                         pointer-events: none;
                         left: -16px;
@@ -69,7 +73,7 @@ button{
                 position: relative;
                 &::before{
                     content: url("data:image/svg+xml,%3Csvg viewBox='0 0 12.7 12.7' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform='translate(169.33 -118.75)'%3E%3Cpath d='m-166.16 119.28v11.641h1.0588v-1.0588h1.0583v-1.0584h1.0588v-1.0578h1.0578v-1e-3h5.3e-4v-1.0563h-5.3e-4v-1e-3h5.3e-4v1e-3h1.0588v-1.0588h-1e-3v-5.3e-4h1e-3v5.3e-4h1.0563v-1.0583c-0.35256 5.2e-4 -0.70428-5.3e-4 -1.0563-5.3e-4v-1.0583h-1.0588v-1.0583h-1.0584v-1.0589h-1.0588v-1.0583h-1.0583v-1.0568z' solid-color='rgb(0,0,0)' font-feature-settings='normal' font-variant-alternates='normal' font-variant-caps='normal' font-variant-ligatures='normal' font-variant-numeric='normal' font-variant-position='normal' isolation='auto' mix-blend-mode='normal' paint-order='normal' shape-padding='0' text-decoration-color='rgb(0,0,0)' text-decoration-line='none' text-decoration-style='solid' text-indent='0' text-orientation='mixed' text-transform='none' white-space='normal'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");                    position: absolute;
-                    fill: black;
+                    fill: #252525;
                     width: 12px;
                     pointer-events: none;
                     left: -12px;
@@ -84,7 +88,7 @@ button{
     top: 0;
     right: 0;
     width: auto;
-    height: 100%;
+    // height: 100%;
 
     hr{
         margin: 1rem 0;
@@ -100,7 +104,7 @@ button{
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(black, 0.5);
+    background: rgba(#252525, 0.5);
 
     display: flex;
     justify-content: center;
@@ -108,6 +112,8 @@ button{
 }
 
 .control-box{
+    pointer-events: all;
+    height: max-content;
     padding: 1rem;
     width: 300px;
     margin: 2rem;
@@ -138,10 +144,8 @@ button{
                     cursor: pointer;
                 }
                 
-                /* removing default appearance */
                 -webkit-appearance: none;
                 appearance: none;
-                /* creating a custom design */
                 width: 1rem;
                 height: 1rem;
                 background: #d8d8d8;
@@ -168,36 +172,6 @@ button{
                       }
                 }
             }
-    
-            // .checkmark {
-            //     width: 1rem;
-            //     height: 1rem;
-            //     background: #d8d8d8;
-            //     display: block;
-            //     margin-right: 4px;
-            //     position: relative;
-    
-                // &:after {
-                //     content: "";
-                //     position: absolute;
-                //     opacity: 0;
-                //     left: 5px;
-                //     top: 1px;
-                //     width: 4px;
-                //     height: 8px;
-                //     border: solid #252525;
-                //     border-width: 0 3px 3px 0;
-                //     -webkit-transform: rotate(45deg);
-                //     -ms-transform: rotate(45deg);
-                //     transform: rotate(45deg);
-                // }
-            // }
-    
-            // &:hover {
-            //     .checkmark {
-            //         outline: 2px solid #252525;
-            //     }
-            // }
         }
     
         input {
@@ -284,6 +258,8 @@ input[type=text]{
     display: flex;
     flex-flow: column;
     justify-content: space-between;
+    position: relative;
+    // opacity: 1;
 
     .icon{ 
         display: flex;
@@ -291,11 +267,33 @@ input[type=text]{
         aspect-ratio: 1;
         align-items: center;
         justify-content: center;
+        transform: translateY(0.25rem);
         svg{
-            width: 4rem;
+            width: 3rem;
             display: block;
         }
     }
+    .name{
+        width: 80%;
+        align-self: center;
+        background: #252525;
+        color: white;
+        font-weight: bold;
+        padding: 4px;
+        transform: translateY(1rem);
+    }
+
+    // &:disabled{
+    //     &::after{
+    //         opacity: 2;
+    //         top: 0;
+    //         left: 0;
+    //         position: absolute;
+    //         content: 'WIP';
+    //         background: #252525;
+    //         color: white;
+    //     }
+    // }
   }
 }
 
@@ -304,4 +302,21 @@ input[type=text]{
     display: grid;
     column-gap: 2px;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.hud{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    pointer-events: none;
+}
+
+.ring-form{
+    // border: 1px solid #d8d8d8;
+    margin-top: 4px;
+    padding: 8px;
+    background: rgba(0,0,0,0.03625);
 }

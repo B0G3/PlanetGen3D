@@ -2,6 +2,11 @@ import { PLANET_NAME_ADJECTIVES, PLANET_NAME_NOUNS } from "./constants";
 
 import * as COLORD from 'colord'
 
+export function radiansToDegrees(radians: number): number {
+    return radians * (180 / Math.PI);
+}
+  
+
 export function getIcosahedronDetail(radius: number, multiplier: number = 1){
     return Math.ceil((radius * 5) / Math.sqrt(3) * multiplier);
 }

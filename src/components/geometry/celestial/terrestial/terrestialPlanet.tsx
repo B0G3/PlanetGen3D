@@ -24,7 +24,7 @@ const geometries = {
 
 export default function Planet({planet} : Props){
     const MAX_HEIGHT = planet.radius * 1.5;
-    const DETAIL = getIcosahedronDetail(planet.radius)
+    const DETAIL = getIcosahedronDetail(planet.radius, 0.5)
     const RADIUS_MULTIPLIER = (1 - (MAX_PLANET_RADIUS - planet.radius)/MAX_PLANET_RADIUS);
     const STEPNESS_MULTIPLIER = (1 - (MAX_PLANET_STEEPNESS - planet.steepness)/MAX_PLANET_STEEPNESS);
     const MOUNTAINOUSNESS_MULTIPLIER = (1 - (MAX_PLANET_MOUNTAINOUSNESS - planet.mountainousness)/MAX_PLANET_MOUNTAINOUSNESS)*(planet.radius/MAX_PLANET_RADIUS);
@@ -44,6 +44,8 @@ export default function Planet({planet} : Props){
         noise += 0.25 * noise4D(vector.x * NOISE_FREQUENCY * 4, vector.y * NOISE_FREQUENCY * 4, vector.z * NOISE_FREQUENCY * 4, SEED);
         noise *= (MOUNTAINOUSNESS_MULTIPLIER ) * 8;
         
+        if(noise <= 0.125) noise -= 0.25;
+
         return Math.round(noise * 4) / 4;
     }
 
@@ -60,8 +62,9 @@ export default function Planet({planet} : Props){
             const vertB_length = vertB.length();
             const vertC_length = vertC.length();
             const shortest = Math.min(vertA_length, vertB_length, vertC_length);
+            const longest = Math.max(vertA_length, vertB_length, vertC_length);
             if(shortest < planet.waterLevel + 0.125 ){ 
-                if(shortest < planet.waterLevel - 1) color.set(planet.colors.getVariant('deep_sand'));
+                if(longest < planet.waterLevel - 1) color.set(planet.colors.getVariant('deep_sand'));
                 else color.set(planet.colors.getVariant('sand'));
             }
             else if(shortest < planet.waterLevel + 0.9 ) color.set(planet.colors.getVariant('grass'));

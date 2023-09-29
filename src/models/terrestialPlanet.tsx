@@ -56,8 +56,11 @@ export default class TerrestialPlanet extends Planet{
           this.enableVegetation = true;
         }
 
-      }else{
+      }else{ // Bare planet
+        const random = Math.random();
+        const withRing = (random < 0.5)
         mountainousness = Math.random() * Math.max(MIN_PLANET_MOUNTAINOUSNESS, (MAX_PLANET_MOUNTAINOUSNESS - 6)) + 3;
+        this.ring.enabled = withRing;
       }
 
 
@@ -71,5 +74,6 @@ export default class TerrestialPlanet extends Planet{
       planetColors.randomize();
       this.setColors(planetColors);
       this.cloudColor = colord(this.colors.computed.ice[1]).mix(this.colors.computed.water[1]).lighten(0.1).toHex() as hexColor;
+      this.ring.color = colord(this.colors.rock).darken(0.2).toHex() as hexColor;
     }
 }

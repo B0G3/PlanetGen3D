@@ -2,6 +2,7 @@ import TerrestialPlanet from "../../models/terrestialPlanet";
 import Slider from 'react-slider'
 import PlanetColorsControl from "./planetColorsControl";
 import { MAX_PLANET_MOUNTAINOUSNESS, MAX_PLANET_RADIUS, MAX_PLANET_STEEPNESS, MIN_PLANET_MOUNTAINOUSNESS, MIN_PLANET_RADIUS, MIN_PLANET_STEEPNESS } from "../../utils/constants";
+import RingForm from "./ringForm";
 
 interface Props{
     data: TerrestialPlanet;
@@ -9,6 +10,12 @@ interface Props{
 }
 
 export default function TerrestialForm({data, update}: Props){
+
+    const toggleRing = (enabled: boolean) => {
+        const ring = data.ring;
+        ring.enabled = enabled;
+        update({ring: ring})
+    }
 
     return (
         <>
@@ -84,6 +91,7 @@ export default function TerrestialForm({data, update}: Props){
                         renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
                     />
                 </div>
+
                 <div className="control-item">
                     <label>Cloud color</label>
                     <input type="color" value={data.cloudColor} onChange={(e) => update({cloudColor: e.target.value})}/>
@@ -114,6 +122,14 @@ export default function TerrestialForm({data, update}: Props){
                         Enable vegetation
                     </label>
                 </div>
+                <div className="control-item">
+                    <label>
+                        <input className={data.ring.enabled ? "checked" : ""} onChange={(e)=>toggleRing(!data.ring.enabled)} type="checkbox"/>
+                        Enable ring
+                    </label>
+                </div>
+
+                {data.ring.enabled && <RingForm planet={data} update={update}></RingForm>}
                 <PlanetColorsControl planet={data} update={update}></PlanetColorsControl>
         </>
     )

@@ -2,19 +2,13 @@ import React from "react";
 import Satellite from "../../models/satellite"
 import SatelliteInterface from "../../interfaces/satellite";
 import Slider from 'react-slider'
+import { radiansToDegrees } from "../../utils/helpers";
 
 interface Props{
     data:  Satellite;
     update: Function;
 }
 
-function radiansToDegrees(radians: number): number {
-    return radians * (180 / Math.PI);
-}
-  
-function degreesToRadians(degrees: number): number {
-    return degrees * (Math.PI / 180);
-}
 
 export default function SatelliteControl({data, update} : Props){
     const [editedObject, setEditedObject] = React.useState<SatelliteInterface>({ ...data });

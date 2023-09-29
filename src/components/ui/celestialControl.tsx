@@ -15,7 +15,7 @@ interface Props{
 
 export default function CelestialControl({data, update} : Props){
     return (
-        <div style={{"margin": '1rem 0 0 0'}}>
+        <div>
             <div className="title">CELESTIAL CONTROLS</div>
             <div className="control-item">
                 <label>Name</label>

@@ -10,12 +10,13 @@ interface Props{
 }
 
 export default function PlanetWater({planet, noiseValue}: Props){
-    const DETAIL = getIcosahedronDetail(planet.waterLevel);
+    const DETAIL = getIcosahedronDetail(planet.waterLevel, 0.5);
     const color = new THREE.Color();
     const v3 = new THREE.Vector3();
 
     const waterGeometry = React.useMemo(()=>{
         const geometry = new THREE.IcosahedronGeometry(Math.round(planet.waterLevel*4)/4 - 0.125, DETAIL);
+        // const geometry = new THREE.IcosahedronGeometry(planet.waterLevel, DETAIL);
         const positions = geometry.attributes.position;
         geometry.setAttribute( 'color', new THREE.BufferAttribute( new Float32Array( positions.count * 3 ), 3 ) );
        

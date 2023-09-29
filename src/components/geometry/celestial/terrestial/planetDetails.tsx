@@ -23,7 +23,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
         {
             // PINE TREE
             density: 4,
-            visible: (e : number) => {return( planet.enableVegetation && e >= planet.waterLevel + 0.25 && e <= planet.waterLevel + 0.9)}, 
+            visible: (e : number) => {return( planet.enableVegetation && e > planet.waterLevel + 0.25 && e <= planet.waterLevel + 0.9)}, 
             meshes: [
                 {
                     ref: React.useRef<THREE.InstancedMesh>(null),
@@ -54,7 +54,7 @@ export default function PlanetDetails({planet, noiseValue}: Props){
         {
             // OAK TREE
             density: 2,
-            visible: (e : number) => {return( planet.enableVegetation && e >= planet.waterLevel + 0.25 && e <= planet.waterLevel + 1)}, 
+            visible: (e : number) => {return( planet.enableVegetation && e > planet.waterLevel + 0.25 && e <= planet.waterLevel + 1)}, 
             meshes: [
                 {
                     ref: React.useRef<THREE.InstancedMesh>(null),

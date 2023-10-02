@@ -33,7 +33,12 @@ export default function SatelliteControl({data, update} : Props){
 
     return (
         <div>
-            <div onClick={()=>setCollapsed(!collapsed)} className="title">ORBIT CONTROLS</div>
+            <div onClick={()=>setCollapsed(!collapsed)} className="title toggleable">ORBIT CONTROLS
+           
+                <svg className={"toggle" + (collapsed?' collapsed':'')} xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 16 16" shape-rendering="crispEdges">
+                    <path stroke="#252525" d="M0 3h2M14 3h2M0 4h3M13 4h3M0 5h4M12 5h4M0 6h5M11 6h5M1 7h5M10 7h5M2 8h5M9 8h5M3 9h10M4 10h8M5 11h6M6 12h4M7 13h2" />
+                </svg>
+            </div>
             {!collapsed && <>
                 <div className="control-item">
                 <label>Distance</label>

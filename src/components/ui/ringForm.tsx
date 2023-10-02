@@ -109,7 +109,7 @@ export default function RingForm({planet, update}: Props){
                     <label>Color</label>
                     <input type="color" value={planet.ring.color} 
                     onChange={(e)=>handleInputChange('color', e.target.value)}/>
-                </div>
+            </div>
         </div>
     )
 }

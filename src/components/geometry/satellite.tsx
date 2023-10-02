@@ -7,6 +7,7 @@ import Renderable from "./renderable";
 import { Line, PointMaterial } from "@react-three/drei";
 import TerrestialPlanet from "../../models/terrestialPlanet";
 import Celestial from "./celestial/celestial";
+import { useGlobalSettingsContext } from "../ui/globalSettingsContext";
 
 interface Props{
     satellite: SatelliteModel,
@@ -30,6 +31,8 @@ function HollowCircle({radius, segments} : {radius: number, segments: number}) {
 }
 
 export default function Satellite({satellite, setSelectedEntity} : Props){
+    const { trajectories } = useGlobalSettingsContext();
+
     const childRef = useRef<THREE.Group>(null);
     const entityRef = useRef<THREE.Group>(null);
     const [startZ, setStartZ] = useState(Math.random() * Math.PI * 2);
@@ -58,7 +61,7 @@ export default function Satellite({satellite, setSelectedEntity} : Props){
                     <Celestial celestial={satellite.entity} setSelectedEntity={setSelectedEntity}></Celestial>
                 </group>
 
-                {/* <HollowCircle radius={distance} segments={32}></HollowCircle> */}
+                {trajectories && <HollowCircle radius={distance} segments={32}></HollowCircle>}
             </group>
         </>);
 

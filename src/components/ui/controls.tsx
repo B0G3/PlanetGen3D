@@ -7,6 +7,7 @@ import Satellite from "../../models/satellite";
 import SatelliteControl from "./satelliteControl";
 import CelestialControl from "./celestialControl";
 import { createRandomGas, createRandomStar, createRandomTerrestial } from "../../utils/generator";
+import GlobalForm from "./globalForm";
 
 interface Props{
     celestials: Array<Celestial>,
@@ -191,7 +192,7 @@ export default function Controls({celestials, setCelestials, selectedEntity, set
                             <button disabled onClick={()=>addEntity("gas", addModal.sequence)}>
                                 <div className="icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 16 16" shape-rendering="crispEdges">
-                                        <path stroke="#000000" d="M5 0h6M3 1h10M2 2h4M10 2h4M1 3h3M12 3h3M1 4h2M6 4h4M13 4h2M0 5h3M5 5h6M13 5h3M0 6h2M4 6h8M14 6h2M0 7h2M4 7h8M14 7h2M0 8h2M4 8h8M14 8h2M0 9h2M4 9h8M14 9h2M0 10h3M5 10h6M13 10h3M1 11h2M6 11h4M13 11h2M1 12h3M12 12h3M2 13h4M10 13h4M3 14h10M5 15h6" />
+                                        <path stroke="#252525" d="M5 0h6M3 1h10M2 2h4M10 2h4M1 3h3M12 3h3M1 4h2M6 4h4M13 4h2M0 5h3M5 5h6M13 5h3M0 6h2M4 6h8M14 6h2M0 7h2M4 7h8M14 7h2M0 8h2M4 8h8M14 8h2M0 9h2M4 9h8M14 9h2M0 10h3M5 10h6M13 10h3M1 11h2M6 11h4M13 11h2M1 12h3M12 12h3M2 13h4M10 13h4M3 14h10M5 15h6" />
                                     </svg>
                                 </div>
                                 <div className="name">Gas</div>
@@ -199,7 +200,7 @@ export default function Controls({celestials, setCelestials, selectedEntity, set
                             <button onClick={()=>addEntity("terrestial", addModal.sequence)}>
                                 <div className="icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 16 16" shapeRendering="crispEdges">
-                                        <path stroke="#000000" d="M5 0h6M3 1h10M2 2h12M1 3h14M1 4h14M0 5h16M0 6h16M0 7h16M0 8h16M0 9h16M0 10h16M1 11h14M1 12h14M2 13h12M3 14h10M5 15h6" />
+                                        <path stroke="#252525" d="M5 0h6M3 1h10M2 2h12M1 3h14M1 4h14M0 5h16M0 6h16M0 7h16M0 8h16M0 9h16M0 10h16M1 11h14M1 12h14M2 13h12M3 14h10M5 15h6" />
                                     </svg>
                                 </div>
                                 <div className="name">Terrestial</div>
@@ -207,7 +208,7 @@ export default function Controls({celestials, setCelestials, selectedEntity, set
                             <button onClick={()=>addEntity("star", addModal.sequence)}>
                                 <div className="icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 16 16" shapeRendering="crispEdges">
-                                        <path stroke="#000000" d="M5 0h6M3 1h10M2 2h4M10 2h4M1 3h3M12 3h3M1 4h2M13 4h2M0 5h3M13 5h3M0 6h2M14 6h2M0 7h2M14 7h2M0 8h2M14 8h2M0 9h2M14 9h2M0 10h3M13 10h3M1 11h2M13 11h2M1 12h3M12 12h3M2 13h4M10 13h4M3 14h10M5 15h6" />
+                                        <path stroke="#252525" d="M5 0h6M3 1h10M2 2h4M10 2h4M1 3h3M12 3h3M1 4h2M13 4h2M0 5h3M13 5h3M0 6h2M14 6h2M0 7h2M14 7h2M0 8h2M14 8h2M0 9h2M14 9h2M0 10h3M13 10h3M1 11h2M13 11h2M1 12h3M12 12h3M2 13h4M10 13h4M3 14h10M5 15h6" />
                                     </svg>
                                 </div>
                                 <div className="name">Star</div>
@@ -217,15 +218,18 @@ export default function Controls({celestials, setCelestials, selectedEntity, set
                 </div>
             </div>}
             <div className="hud">
-                <div className="control-box" style={{maxHeight: 'calc(100vh - 6rem)', overflowY: 'scroll'}}>
-                    <div id="entity-list">
+                <div className="control-box" style={{'top': '1rem', 'left': '1rem', 'position': 'absolute'}}>
+                    <div className="title">Global settings</div>
+                        <GlobalForm></GlobalForm>
+                    <div className="title">Celestial list</div>
+                    <div style={{'margin': '4px 0 0 0 '}} id="entity-list">
                         {celestials.map((e, k) => <CelestialControlsItem key={e.id} entity={e} selectEntity={selectEntity} deleteEntity={deleteEntity} addEntity={showAddModal} currentSequence={selectedEntity?.getSequence()??[]}></CelestialControlsItem>)}
                     </div>
                 </div>
-                <div className="controls-wrapper">
+                {/* <div className="controls-wrapper"> */}
                     { 
                     (selectedEntity && selectedEntity?.getSequence()?.length) &&
-                    <div className="control-box">
+                    <div className="control-box" style={{'top': '1rem', 'right': '1rem', 'position': 'absolute'}}>
                         {selectedEntity instanceof Celestial && <>
                             <CelestialControl data={selectedEntity} update={updateSatellite}></CelestialControl>
                         </>}
@@ -236,7 +240,7 @@ export default function Controls({celestials, setCelestials, selectedEntity, set
                             </>}
                         </>}
                     </div>}
-                </div>
+                {/* </div> */}
             </div>
        </>
     )

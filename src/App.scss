@@ -11,9 +11,9 @@ html * {
     user-select: none; /* Standard syntax */
 }
 
-.canvas-background{
-    background: linear-gradient(180deg, rgba(28,12,102,1) 0%, rgba(8,1,43,1) 100%);
-}
+// .canvas-background{
+//     background: linear-gradient(180deg, rgba(28,12,102,1) 0%, rgba(8,1,43,1) 100%);
+// }
 
 button{
     display: flex;
@@ -41,12 +41,16 @@ button{
             padding: 2px 0 2px 4px;
 
             .buttons{
+                padding-right: 2px;
                 display: flex;
                 button{
                     margin-left: 4px;
                     width: 1rem;
                     height: 1rem;
                 }
+                .toggle{background: #70a0b8;}
+                .delete{background: #be5050;}
+                .add{background: #6fa86f;}
             }
 
             .name{
@@ -116,8 +120,10 @@ button{
     height: max-content;
     padding: 1rem;
     width: 300px;
-    margin: 2rem;
+    overflow-y: auto;
     background: #efefef;
+
+    max-height: calc(100vh - 4rem);
 
     .title{
         text-align: center;
@@ -128,6 +134,22 @@ button{
             position: absolute;
             top: 0;
             right: 0;
+        }
+
+        &.toggleable{
+            cursor: pointer;
+        }
+
+        .toggle{
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1rem;
+            height: 1rem;
+
+            &:not(.collapsed){
+                transform: rotate(180deg);
+            }
         }
     }
 
@@ -305,13 +327,13 @@ input[type=text]{
 }
 
 .hud{
-    display: flex;
     width: 100vw;
     height: 100vh;
-    justify-content: space-between;
     position: fixed;
     top: 0;
+    left: 0;
     pointer-events: none;
+    overflow: hidden;
 }
 
 .ring-form{

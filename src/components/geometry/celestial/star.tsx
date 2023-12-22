@@ -80,6 +80,7 @@ export default function({star} : {star: Star}){
 
     return (
         <group>
+            {/* <pointLight castShadow={true} decay={0} distance={200 + 25 *star.radius} power={15 * Math.sqrt(star.radius)} color={star.color} /> */}
             <mesh>
                 <primitive object={starGeometry} attach="geometry"></primitive>
                 <meshBasicMaterial

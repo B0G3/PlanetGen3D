@@ -32,15 +32,12 @@ export default function Universe({celestials, selectedEntity, setSelectedEntity}
         if(selectedEntity instanceof Celestial){
             setMinDistance(selectedEntity.radius * 1.5);
             cameraControlRef.current?.dollyTo(selectedEntity.radius * 3, true);
-            // setMaxDistance(selectedEntity.radius * 4 + 4);
         }
         if(selectedEntity instanceof Satellite){
             let entity = selectedEntity.entity;
             if(entity instanceof Celestial){
                 setMinDistance(entity.radius * 1.5);
                 cameraControlRef.current?.dollyTo(entity.radius * 3, true);
-                
-                // setMaxDistance(entity.radius * 4 + 4);
             }
         }
     }, [selectedEntity])

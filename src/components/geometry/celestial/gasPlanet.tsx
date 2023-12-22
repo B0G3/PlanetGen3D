@@ -47,11 +47,9 @@ export default function GasPlanet({planet} : Props){
                 vertB.fromBufferAttribute(positions, k * 3 + 1);
                 vertC.fromBufferAttribute(positions, k * 3 + 2);
                 const lowestZ = Math.min(vertA.z, vertB.z, vertC.z);
-                // console.log(lowestZ);
-                
+
                 // if(v3.z > -0.5 && v3.z < 0.5 ) color.set(colord(planet.coreColor).darken(1).toHex());
                 color.set(colord(planet.coreColor).lighten((planet.radius/4-Math.abs(lowestZ))/(planet.radius/4)).toHex());
-                // color.set(colorVariation(colord(planet.coreColor), 0.05).toHex())
                 colors.setXYZ(k * 3, color.r, color.g, color.b);
                 colors.setXYZ(k * 3 + 1, color.r, color.g, color.b);
                 colors.setXYZ(k * 3 + 2, color.r, color.g, color.b);

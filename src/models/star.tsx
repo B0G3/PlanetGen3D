@@ -23,7 +23,7 @@ export default class Star extends Celestial{
     randomize(){
         this.name = generateName();
         this.fluctuations = Math.random()*2;
-        this.color = random().toHex() as hexColor;
+        this.color = random().lighten(0.2).toHex() as hexColor;
       }
 
 }

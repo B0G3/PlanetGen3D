@@ -30,6 +30,7 @@ export default function Planet({planet} : Props){
     const MOUNTAINOUSNESS_MULTIPLIER = (1 - (MAX_PLANET_MOUNTAINOUSNESS - planet.mountainousness)/MAX_PLANET_MOUNTAINOUSNESS)*(planet.radius/MAX_PLANET_RADIUS);
     const NOISE_FREQUENCY = STEPNESS_MULTIPLIER * 1.25 * RADIUS_MULTIPLIER + 0.5;
     const SEED = React.useMemo(() => Math.random()*1000, []);
+    const M_SEED = React.useMemo(() => Math.random()*1000, []);
 
     const color = new THREE.Color();
     const v3 = new THREE.Vector3();
@@ -44,17 +45,22 @@ export default function Planet({planet} : Props){
         noise += 0.25 * noise4D(vector.x * NOISE_FREQUENCY * 4, vector.y * NOISE_FREQUENCY * 4, vector.z * NOISE_FREQUENCY * 4, SEED);
         noise *= (MOUNTAINOUSNESS_MULTIPLIER ) * 8;
         
-        if(noise <= 0.125) noise -= 0.25;
+        noise = Math.round(noise * 4) / 4;
+        return noise;
+    }
 
-        return Math.round(noise * 4) / 4;
+    const getMoistureValue = (vector : THREE.Vector3) => {
+        let noise = 0;
+        noise = 1 * noise4D(0.03 * vector.x, 0.03 *  vector.y, 0.03 * vector.z, M_SEED);
+        noise += 0.5 * noise4D(0.06 * vector.x, 0.06 * vector.y, 0.06 * vector.z, M_SEED);
+        
+        return Math.round(noise * 2) / 2;
     }
 
     const updateColors = (geometry: THREE.BufferGeometry) => {
         const positions = geometry.attributes.position;
         const colors = geometry.attributes.color;
         for (let i = 0; i < positions.count/3; i++ ) {
-
-            v3.fromBufferAttribute(positions, i).normalize();
             vertA.fromBufferAttribute(positions, i * 3 + 0);
             vertB.fromBufferAttribute(positions, i * 3 + 1);
             vertC.fromBufferAttribute(positions, i * 3 + 2);
@@ -70,6 +76,8 @@ export default function Planet({planet} : Props){
             else if(shortest < planet.waterLevel + 0.9 ) color.set(planet.colors.getVariant('grass'));
             else if(shortest < planet.waterLevel + 1.75 ) color.set(planet.colors.getVariant('rock'));
             else color.set(planet.colors.getVariant('ice'));
+            // let moisture = getMoistureValue(vertA);
+            // color.set(colord("#0000ff").lighten(moisture).toHex())
 
 
             colors.setXYZ(i * 3, color.r, color.g, color.b);
@@ -88,11 +96,11 @@ export default function Planet({planet} : Props){
         let noise = 0;
         let k = 0;
         for (let i = 0; i < positions.count; i++ ) {
-
             basePosition.fromBufferAttribute(positions, i).normalize();
             noise = getNoiseValue(basePosition);
 
-            v3.copy(basePosition).multiplyScalar(planet.radius).addScaledVector(basePosition, noise + 0.01);
+            v3.copy(basePosition).multiplyScalar(planet.radius).addScaledVector(basePosition, noise);
+            // if(v3.length() <= planet.waterLevel + 0.25) v3.clampLength(planet.radius / 2, v3.length() - 0.25)
             v3.clampLength(-planet.radius/2, MAX_HEIGHT)
             positions.setXYZ(i, v3.x, v3.y, v3.z);
 

@@ -55,7 +55,7 @@ export default function PlanetRing({planet}:{planet: Planet}){
     React.useEffect(()=>{
         const points: Array<THREE.Vector3> = [];
         const upVector = new THREE.Vector3(0, 1, 0);
-        const y_offset = Math.sqrt(planet.radius);
+        const y_offset = Math.sqrt(planet.radius) * 1.25;
 
         for (let i = 0; i < POINT_COUNT; i++) {
             const angle = Math.random() * 2 * Math.PI;

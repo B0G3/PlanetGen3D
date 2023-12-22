@@ -11,16 +11,16 @@ html * {
     user-select: none; /* Standard syntax */
 }
 
-// .canvas-background{
-//     background: linear-gradient(180deg, rgba(28,12,102,1) 0%, rgba(8,1,43,1) 100%);
-// }
+body{
+    overflow: hidden;
+}
 
 button{
     display: flex;
     border: none;
     border-radius: 0;
     background: #d8d8d8;
-    &:hover:not([disabled]){
+    &:hover:not([disabled]):not(.unclickable){
         outline: 2px solid #252525;
         cursor: pointer;
     }
@@ -142,10 +142,10 @@ button{
 
         .toggle{
             position: absolute;
-            top: 0;
+            top: 0.125rem;
             right: 0;
-            width: 1rem;
-            height: 1rem;
+            width: 0.75rem;
+            height: 0.75rem;
 
             &:not(.collapsed){
                 transform: rotate(180deg);
@@ -319,6 +319,7 @@ input[type=text]{
   }
 }
 
+
 .planet-color-controls{
     text-align: center;
     display: grid;
@@ -341,4 +342,86 @@ input[type=text]{
     margin-top: 4px;
     padding: 8px;
     background: rgba(0,0,0,0.03625);
+}
+
+.text-muted{
+    color: #3c3c3c;
+}
+
+.about{
+    .controls{
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+    }
+    .buttons{
+        // margin-top: 4px;
+        padding-right: 2px;
+        display: flex;
+        flex-flow: column;
+        .item{
+            display: flex;
+            margin-top: 2px;
+        }
+        button{
+            margin-right: 4px;
+            width: 1rem;
+            height: 1rem;
+        }
+        .toggle{background: #70a0b8;}
+        .delete{background: #be5050;}
+        .add{background: #6fa86f;}
+    }
+}
+
+.mobile-overlay{
+    position: fixed;
+    display: none;
+    top: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .mobile-overlay{
+        display: block;
+        z-index: 9999;
+        width: 100%;
+        height: 100%;
+        background: #252525;
+        color: #efefef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .title{
+            font-size: 3rem;
+            text-align: center;
+        }
+        .pc-icon{
+            width: 120px;
+            margin: auto;
+        }
+    }
+}
+
+#about{
+    width: 1rem;
+    height: 1rem;
+    &.pulse{
+        background-color: #f18a30;
+        color: #f18a30;
+        animation: pulse-waves infinite 1s;
+    }
+}
+
+@keyframes pulse-waves {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 70%, transparent);;
+    }
+  
+    70% {
+      box-shadow: 0 0 0 10px color-mix(in srgb, currentColor 0%, transparent);;
+    }
+  
+    100% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 0%, transparent);;
+    }
 }

@@ -1,7 +1,6 @@
 import React from "react";
 import TerrestialPlanet from "../../../../models/terrestialPlanet"
 import * as THREE from "three";
-import { colord } from "colord";
 import { getIcosahedronDetail } from "../../../../utils/helpers";
 
 interface Props{
@@ -15,8 +14,7 @@ export default function PlanetWater({planet, noiseValue}: Props){
     const v3 = new THREE.Vector3();
 
     const waterGeometry = React.useMemo(()=>{
-        const geometry = new THREE.IcosahedronGeometry(Math.round(planet.waterLevel*4)/4 - 0.125, DETAIL);
-        // const geometry = new THREE.IcosahedronGeometry(planet.waterLevel, DETAIL);
+        const geometry = new THREE.IcosahedronGeometry(Math.round(planet.waterLevel*4)/4 + 0.125, DETAIL);
         const positions = geometry.attributes.position;
         geometry.setAttribute( 'color', new THREE.BufferAttribute( new Float32Array( positions.count * 3 ), 3 ) );
        
@@ -30,8 +28,8 @@ export default function PlanetWater({planet, noiseValue}: Props){
                 const v3_2 = new THREE.Vector3();
                 v3_2.copy(v3).multiplyScalar(planet.radius).addScaledVector(v3, noise).length();
 
-                if(v3_2.length() + 0.5 > planet.waterLevel) color.set(planet.colors.computed.water[0]);
-                else if(v3_2.length() + 1 > planet.waterLevel) color.set(planet.colors.computed.water[1]);
+                if(v3_2.length() + 0.5 >= planet.waterLevel) color.set(planet.colors.computed.water[1]);
+                // else if(v3_2.length() + 1 > planet.waterLevel) color.set(planet.colors.computed.water[1]);
                 else color.set(planet.colors.computed.water[2]);
 
                 colors.setXYZ(k * 3 + 0, color.r, color.g, color.b);

@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/PlanetGen3D/static/css/main.57b444ed.css",
+    "main.js": "/PlanetGen3D/static/js/main.5b878362.js",
+    "static/js/787.9dd98f2b.chunk.js": "/PlanetGen3D/static/js/787.9dd98f2b.chunk.js",
+    "index.html": "/PlanetGen3D/index.html",
+    "main.57b444ed.css.map": "/PlanetGen3D/static/css/main.57b444ed.css.map",
+    "main.5b878362.js.map": "/PlanetGen3D/static/js/main.5b878362.js.map",
+    "787.9dd98f2b.chunk.js.map": "/PlanetGen3D/static/js/787.9dd98f2b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.57b444ed.css",
+    "static/js/main.5b878362.js"
+  ]
+}

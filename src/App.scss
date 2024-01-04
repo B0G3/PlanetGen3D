@@ -1,5 +1,66 @@
 
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+.dot-flashing {
+ position: relative;
+ width: 1rem;
+ height: 1rem;
+ background-color: #afafaf10;
+ animation: dot-flashing 1.5s infinite linear alternate;
+ animation-delay: 0.5s;
+}
+.dot-flashing::before, .dot-flashing::after {
+ content: "";
+ display: inline-block;
+ position: absolute;
+ top: 0;
+}
+.dot-flashing::before {
+ left: -2rem;
+ width: 1rem;
+ height: 1rem;
+ background-color: #afafaf;
+ animation: dot-flashing 1.5s infinite alternate;
+ animation-delay: 0s;
+}
+.dot-flashing::after {
+ left: 2rem;
+ width: 1rem;
+ height: 1rem;
+ background-color: #afafaf10;
+ animation: dot-flashing 1.5s infinite alternate;
+ animation-delay: 1s;
+}
+
+@keyframes dot-flashing {
+ 0%, 32% {
+    background-color: #afafaf10;
+  }
+ 33%, 66% {
+   background-color: #afafaf;
+ }
+ 67%, 100% {
+    background-color: #afafaf10;
+  }
+}
+
+#preloader{
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background: #252525;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    color: #efefef;
+    font-size: 2rem;
+    pointer-events: none;
+}
+
 html * {
     font-family: "VT323", system-ui;
     text-transform: uppercase;

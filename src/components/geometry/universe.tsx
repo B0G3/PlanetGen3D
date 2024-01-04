@@ -25,6 +25,9 @@ export default function Universe({celestials, selectedEntity, setSelectedEntity}
         scene.traverse(obj => obj.frustumCulled = false);
         camera.far = 10000000;
         camera.updateProjectionMatrix();
+
+        const preloader = document.getElementById('preloader')
+        if(preloader) preloader.style.opacity = '0';
     }, [])
 
     React.useEffect(()=>{

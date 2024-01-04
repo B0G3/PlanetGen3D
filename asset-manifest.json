@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/PlanetGen3D/static/css/main.baefc87b.css",
-    "main.js": "/PlanetGen3D/static/js/main.ae933c86.js",
+    "main.css": "/PlanetGen3D/static/css/main.6407235d.css",
+    "main.js": "/PlanetGen3D/static/js/main.a6241f89.js",
     "static/js/787.9dd98f2b.chunk.js": "/PlanetGen3D/static/js/787.9dd98f2b.chunk.js",
     "index.html": "/PlanetGen3D/index.html",
-    "main.baefc87b.css.map": "/PlanetGen3D/static/css/main.baefc87b.css.map",
-    "main.ae933c86.js.map": "/PlanetGen3D/static/js/main.ae933c86.js.map",
+    "main.6407235d.css.map": "/PlanetGen3D/static/css/main.6407235d.css.map",
+    "main.a6241f89.js.map": "/PlanetGen3D/static/js/main.a6241f89.js.map",
     "787.9dd98f2b.chunk.js.map": "/PlanetGen3D/static/js/787.9dd98f2b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.baefc87b.css",
-    "static/js/main.ae933c86.js"
+    "static/css/main.6407235d.css",
+    "static/js/main.a6241f89.js"
   ]
 }
